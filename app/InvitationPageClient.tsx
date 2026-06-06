@@ -102,7 +102,7 @@ export default function InvitationPageClient({ guestName, data }: Props) {
   return (
     <main className="min-h-screen bg-[#f4f1de] overflow-x-hidden">
       {/* Audio */}
-      <audio ref={audioRef} src="/music.mp3" loop />
+      <audio ref={audioRef} src="/music2.mp3" loop />
 
       {!opened && (
         <EnvelopeOpener guestName={guestName} onOpen={() => setOpened(true)} />
