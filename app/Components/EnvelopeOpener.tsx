@@ -507,7 +507,7 @@ export default function EnvelopeOpener({ guestName, onOpen }: Props) {
         <div className="envelope-wrap">
           {/* Greeting above */}
           <div className="greeting-block">
-            <p className="greeting-label">buat kamu yang spesial 🎉</p>
+            <p className="greeting-label">buat kamu yang spesial</p>
             <p className="greeting-name">{guestName}</p>
           </div>
 

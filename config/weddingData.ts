@@ -47,12 +47,12 @@ export const weddingData = {
       female: "Kebaya, gaun, atau dress bernuansa sage green / dusty rose / pastel",
     },
     gift: {
-      address: "Dusun Gunung Buleud RT 02 RW 01 Desa Jatimulya Sumedang Utara Kabupaten Sumedang",
+      address: "Kp. Babakan Tetelar RT 04 RW 06, Desa Rancaekek Kulon, Kecamatan Rancaekek, Kabupaten Bandung (Rumah mempelai wanita)",
       contactPerson: "Ibu Siti Rahayu",
       contactPhone: "0812-3456-7890",
       bankAccounts: [
-        { bank: "BCA", accountNumber: "7741310493", accountName: "Fantria Ayuning" },
-        { bank: "Permata Bank", accountNumber: "9950214780", accountName: "Fantria Ayuning" },
+        { bank: "MANDIRI", accountNumber: "1310019142605", accountName: "Yono Sumarno" },
+        { bank: "Sea Bank", accountNumber: "901263720362", accountName: "Khaharani Sumadwiyanti" },
       ],
     },
     closing: {
