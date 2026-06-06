@@ -1,41 +1,42 @@
+
 import heroImage from "../public/Asset3.svg";
 
 export const weddingData = {
     groom: {
-      name: "Rifki",
-      fullName: "Rifki Achmad Fachrezy",
+      name: "Bamboo",
+      fullName: "Yono Sumarno",
       photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-      father: "Bapak Engkus Suryadi",
-      mother: "Ibu Linda Yosepa",
-      instagram: "@rizkypratama",
+      father: "Bapak Sutarto",
+      mother: "Ibu Sumini",
+      instagram : ""
     },
     bride: {
-      name: "Ayu",
-      fullName: "Fantria Ayuning Dwinita Ramdhani",
+      name: "Nanachan",
+      fullName: "Khaharani Sumadwiyanti",
       photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face",
-      father: "Bapak Dadan Muhammad Ramdhan",
-      mother: "Almh. Iis Nurhayati",
-      instagram: "@anisasafira",
+      father: "Bapak Ano Sumarno (Alm)",
+      mother: "IBu Dwi Mami Sulistyorini",
+      instagram : ""
     },
     heroImage: heroImage,
     coupleImage: "./public/image/Asset3.jpg",
-    weddingDate: "2026-04-04T10:00:00",
+    weddingDate: "2026-08-16T08:00:00",
     akad: {
       day: "Sabtu",
-      date: "4 April 2026",
-      time: "09.00 – 11.00 WIB",
-      venue: "Cafe Kamara",
-      address: "Jl. Raden Suyud No.23, Kotakulon, Kec. Sumedang Sel, Kabupaten Sumedang",
+      date: "16 Agustus 2026",
+      time: "08.00 – 10.00 WIB",
+      venue: "ONYX Guesthouse",
+      address: "Jl. Desa Jelegong No.51, Jelegong, Kec. Rancaekek, Kabupaten Bandung",
     },
     resepsi: {
       day: "Sabtu",
-      date: "4 April 2026",
+      date: "16 Agustus 2026",
       time: "11.00 – 14.00 WIB",
-      venue: "Cafe Kamara",
-      address: "Jl. Raden Suyud No.23, Kotakulon, Kec. Sumedang Sel, Kabupaten Sumedang",
+      venue: "ONYX Guesthouse",
+      address: "Jl. Desa Jelegong No.51, Jelegong, Kec. Rancaekek, Kabupaten Bandung",
     },
     googleMapsEmbed:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2395.8505190700216!2d107.91702414705047!3d-6.857357767713664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68d10064186d65%3A0x8e6536e66b57e224!2sCafe%20Kamara!5e1!3m2!1sid!2sid!4v1774524776099!5m2!1sid!2sid",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.3995829375795!2d107.7729179!3d-6.9621007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68c5eb2c22ddd9%3A0x1b91576c2b444cbe!2sONYX%20Guesthouse!5e0!3m2!1sid!2sid!4v1780749991548!5m2!1sid!2sid",
     googleMapsUrl: "https://maps.app.goo.gl/Fn1xnNdAUDqvRHfVA",
     dressCode: {
       theme: "Winter Grey",

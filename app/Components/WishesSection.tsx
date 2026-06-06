@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { StaticImageData } from "next/image";
-import Image from "next/image";
 
 interface Wish {
   id: number;
@@ -22,18 +21,75 @@ interface Props {
 }
 
 const ATTENDANCE_OPTIONS = [
-  { value: "hadir", label: "Insya Allah Hadir", icon: "✓" },
-  { value: "tidak_hadir", label: "Tidak Hadir", icon: "✗" },
-  { value: "mungkin", label: "Masih Belum Pasti", icon: "?" },
+  { value: "hadir",        label: "✓ Hadir" },
+  { value: "tidak_hadir", label: "✗ Tidak Hadir" },
+  { value: "mungkin",     label: "? Belum Pasti" },
 ];
 
 const ATTENDANCE_LABEL: Record<string, { label: string; color: string }> = {
-  hadir: { label: "Hadir", color: "rgba(61,64,91,0.7)" },
-  tidak_hadir: { label: "Tidak Hadir", color: "rgba(61,64,91,0.35)" },
-  mungkin: { label: "Mungkin Hadir", color: "rgba(61,64,91,0.5)" },
+  hadir:        { label: "Hadir",         color: "#4a7c59" },
+  tidak_hadir:  { label: "Tidak Hadir",   color: "#c97a7a" },
+  mungkin:      { label: "Mungkin Hadir", color: "#a39171" },
 };
 
-export default function WishesSection({ data, guestName }: Props) {
+// ── Doodles (forest stroke matching HeroSection) ──────────────────
+
+const HeartDoodle = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path
+      d="M40 58 C30 48, 8 38, 8 20 C8 10, 16 4, 24 4 C30 4, 36 8, 40 14 C44 8, 50 4, 56 4 C64 4, 72 10, 72 20 C72 38, 50 48, 40 58Z"
+      stroke="#a39171" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
+    />
+    <path d="M40 50 C34 44, 18 36, 18 24" stroke="#a39171" strokeWidth="1.2" strokeLinecap="round" opacity="0.35" fill="none" />
+  </svg>
+);
+
+const StarDoodle = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M30 6 L35 22 L52 22 L38 32 L43 48 L30 38 L17 48 L22 32 L8 22 L25 22 Z"
+      stroke="#d4a373" strokeWidth="2" strokeLinejoin="round" fill="none" />
+    <circle cx="30" cy="30" r="5" stroke="#d4a373" strokeWidth="1.5" fill="none" />
+  </svg>
+);
+
+const PenDoodle = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M12 48 L20 28 L40 8 L52 20 L32 40 Z" stroke="#2a2e1e" strokeWidth="2" strokeLinejoin="round" fill="none" />
+    <path d="M40 8 L52 20" stroke="#2a2e1e" strokeWidth="2" strokeLinecap="round" />
+    <path d="M20 28 L32 40" stroke="#2a2e1e" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="3 2" />
+    <path d="M12 48 L8 52 L16 50 Z" stroke="#2a2e1e" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
+    <path d="M44 12 L48 16" stroke="#d4a373" strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
+const BubbleDoodle = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 70 60" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M8 8 Q8 4 12 4 L58 4 Q62 4 62 8 L62 38 Q62 42 58 42 L28 42 L16 56 L18 42 L12 42 Q8 42 8 38 Z"
+      stroke="#2a2e1e" strokeWidth="2.5" strokeLinejoin="round" fill="none" />
+    <path d="M20 18 L50 18" stroke="#2a2e1e" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M20 27 L40 27" stroke="#2a2e1e" strokeWidth="1.8" strokeLinecap="round" />
+  </svg>
+);
+
+const WavyLine = ({ color = "#a39171", className }: { color?: string; className?: string }) => (
+  <svg viewBox="0 0 120 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path
+      d="M2 10 Q12 2, 22 10 Q32 18, 42 10 Q52 2, 62 10 Q72 18, 82 10 Q92 2, 102 10 Q112 18, 118 10"
+      stroke={color} strokeWidth="2.5" strokeLinecap="round" fill="none"
+    />
+  </svg>
+);
+
+const CheckDoodle = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <circle cx="30" cy="30" r="24" stroke="#2a2e1e" strokeWidth="2.5" fill="none" />
+    <path d="M18 30 L26 38 L42 22" stroke="#d4a373" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+  </svg>
+);
+
+// ── Main ─────────────────────────────────────────────────────────
+
+export default function WishesSection({ guestName }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,42 +103,19 @@ export default function WishesSection({ data, guestName }: Props) {
     attendance: "hadir",
   });
 
-  // Intersection observer for staggered entrance
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.querySelectorAll(".wsh-reveal").forEach((el, i) => {
-              setTimeout(() => {
-                (el as HTMLElement).classList.add("wsh-in");
-              }, i * 110);
-            });
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  // Fetch wishes
   const fetchWishes = async () => {
     try {
       const res = await fetch("/api/wishes");
       const json = await res.json();
       if (json.success) setWishes(json.data);
     } catch {
-      // silent fail — list tetap kosong
+      // silent fail
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchWishes();
-  }, []);
+  useEffect(() => { fetchWishes(); }, []);
 
   const handleSubmit = async () => {
     setError("");
@@ -94,7 +127,6 @@ export default function WishesSection({ data, guestName }: Props) {
       setError("Pesan ucapan minimal 5 karakter.");
       return;
     }
-
     setSubmitting(true);
     try {
       const res = await fetch("/api/wishes", {
@@ -104,7 +136,6 @@ export default function WishesSection({ data, guestName }: Props) {
       });
       const json = await res.json();
       if (!json.success) throw new Error(json.message);
-
       setSubmitted(true);
       setWishes((prev) => [json.data, ...prev]);
       setForm((f) => ({ ...f, message: "" }));
@@ -115,415 +146,468 @@ export default function WishesSection({ data, guestName }: Props) {
     }
   };
 
-  const formatDate = (iso: string) => {
-    return new Date(iso).toLocaleDateString("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
+  const formatDate = (iso: string) =>
+    new Date(iso).toLocaleDateString("id-ID", {
+      day: "numeric", month: "long", year: "numeric",
     });
-  };
 
   return (
     <>
       <style>{`
-        /* Reveal animation */
-        .wsh-reveal {
-          opacity: 0;
-          transform: translateY(24px);
-          transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-                      transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .wsh-reveal.wsh-in {
-          opacity: 1;
-          transform: translateY(0);
+        /* ── Identical grid bg to HeroSection ── */
+        .wb-bg-wishes {
+          background-color: #fefae0;
+          background-image:
+            linear-gradient(rgba(42,46,30,0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(42,46,30,0.07) 1px, transparent 1px);
+          background-size: 44px 44px;
         }
 
-        /* Divider line grow */
-        .wsh-line {
-          transform: scaleX(0);
-          transform-origin: center;
-          transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .wsh-reveal.wsh-in .wsh-line { transform: scaleX(1); }
+        /* ── Floats ── */
+        @keyframes wFloatA { 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-12px) rotate(-6deg)} }
+        @keyframes wFloatB { 0%,100%{transform:translateY(0) rotate(8deg)}  50%{transform:translateY(-10px) rotate(8deg)}  }
+        @keyframes wFloatC { 0%,100%{transform:translateY(0) rotate(-10deg)} 50%{transform:translateY(-14px) rotate(-10deg)} }
+        @keyframes wFloatD { 0%,100%{transform:translateY(0) rotate(5deg)}  50%{transform:translateY(-8px) rotate(5deg)}  }
+        @keyframes wWiggle  { 0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(4deg)} }
+        .w-float-a { animation: wFloatA 6s ease-in-out infinite; }
+        .w-float-b { animation: wFloatB 7s ease-in-out infinite; }
+        .w-float-c { animation: wFloatC 5s ease-in-out infinite; }
+        .w-float-d { animation: wFloatD 8s ease-in-out infinite; }
+        .w-wiggle  { animation: wWiggle 4s ease-in-out infinite; }
 
-        /* Floating images */
-        @keyframes wshFloat {
-          0%, 100% { translate: 0 0; }
-          50% { translate: 0 -14px; }
+        /* ── marker-box — identical to HeroSection ── */
+        .wsh-marker-box {
+          border: 3px solid #2a2e1e;
+          border-radius: 6px;
+          position: relative;
+          background: #fefae0;
+          box-shadow: 6px 6px 0 0 rgba(42,46,30,0.12), 8px 8px 0 0 #2a2e1e;
         }
-        .wsh-float { animation: wshFloat 7s ease-in-out infinite; }
-
-        /* Grain */
-        .wsh-section::before {
+        .wsh-marker-box::before {
           content: '';
           position: absolute;
-          inset: 0;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+          inset: 7px;
+          border: 1.5px dashed rgba(42,46,30,0.18);
+          border-radius: 3px;
           pointer-events: none;
-          opacity: 0.4;
         }
 
-        /* Form input / textarea */
+        /* ── Corner brackets ── */
+        .wsh-corner {
+          position: absolute;
+          width: 14px; height: 14px;
+          border-color: #d4a373;
+          border-style: solid;
+          opacity: 0.65;
+        }
+        .wsh-corner.tl { top: 9px;  left: 9px;  border-width: 2px 0 0 2px; }
+        .wsh-corner.tr { top: 9px;  right: 9px; border-width: 2px 2px 0 0; }
+        .wsh-corner.bl { bottom: 9px; left: 9px;  border-width: 0 0 2px 2px; }
+        .wsh-corner.br { bottom: 9px; right: 9px; border-width: 0 2px 2px 0; }
+
+        /* ── Tape ── */
+        .wsh-tape {
+          position: absolute;
+          width: 56px; height: 22px;
+          background: rgba(212,163,115,0.28);
+          border: 1.5px solid rgba(212,163,115,0.5);
+          border-radius: 3px;
+          z-index: 20;
+        }
+
+        /* ── Input / textarea ── */
         .wsh-input {
           width: 100%;
-          background: rgba(61,64,91,0.04);
-          border: 1px solid rgba(61,64,91,0.18);
+          padding: 12px 14px;
+          background: #fefae0;
+          border: 2.5px solid #2a2e1e;
           border-radius: 4px;
-          padding: 12px 16px;
-          color: #3d405b;
-          font-family: var(--font-amiri), serif;
-          font-size: 14px;
+          color: #2a2e1e;
+          font-family: var(--font-display, 'Caveat', cursive);
+          font-size: 1.05rem;
           outline: none;
-          transition: border-color 0.3s ease, background 0.3s ease;
+          box-shadow: 3px 3px 0 0 rgba(42,46,30,0.15);
+          transition: box-shadow 0.2s ease, border-color 0.2s ease;
           resize: none;
+          letter-spacing: 0.02em;
         }
-        .wsh-input::placeholder {
-          color: rgba(61,64,91,0.35);
-        }
+        .wsh-input::placeholder { color: #a39171; opacity: 0.7; }
         .wsh-input:focus {
-          border-color: rgba(61,64,91,0.45);
-          background: rgba(61,64,91,0.06);
+          border-color: #2a2e1e;
+          box-shadow: 4px 4px 0 0 rgba(42,46,30,0.25);
         }
 
-        /* Attendance pill button */
-        .wsh-pill {
-          flex: 1;
-          padding: 9px 4px;
-          border: 1px solid rgba(61,64,91,0.2);
-          border-radius: 9999px;
-          background: transparent;
-          color: #3d405b;
-          font-family: var(--font-amiri), serif;
-          font-size: 11px;
-          letter-spacing: 0.05em;
+        /* ── Attendance pill buttons ── */
+        .wsh-attend-btn {
+          width: 100%;
+          padding: 10px 4px;
+          border: 2.5px solid #2a2e1e;
+          border-radius: 4px;
+          background: #fefae0;
+          color: #2a2e1e;
+          font-family: var(--font-display, 'Caveat', cursive);
+          font-size: 0.88rem;
           cursor: pointer;
-          transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+          transition: all 0.2s ease;
+          box-shadow: 3px 3px 0 0 rgba(42,46,30,0.15);
           text-align: center;
           white-space: nowrap;
         }
-        .wsh-pill.active {
-          background: #3d405b;
-          border-color: #3d405b;
-          color: #f4f1de;
+        .wsh-attend-btn.active {
+          background: #2a2e1e;
+          color: #fefae0;
+          box-shadow: 2px 2px 0 0 rgba(42,46,30,0.4);
+          transform: translate(1px, 1px);
         }
 
-        /* Submit button */
+        /* ── Submit button — identical to HeroSection btn-chalk style ── */
         .wsh-submit {
+          width: 100%;
+          padding: 14px;
+          font-family: var(--font-display, 'Caveat', cursive);
+          font-size: 1.2rem;
+          letter-spacing: 0.1em;
+          border: 3px solid #2a2e1e;
+          border-radius: 6px;
+          background: #fefae0;
+          color: #2a2e1e;
+          cursor: pointer;
           position: relative;
-          display: inline-flex;
+          overflow: hidden;
+          box-shadow: 4px 4px 0 0 #2a2e1e;
+          transition: box-shadow 0.2s ease, transform 0.2s ease;
+          display: flex;
           align-items: center;
           justify-content: center;
-          gap: 8px;
-          width: 100%;
-          padding: 13px 32px;
-          border: 1px solid rgba(61,64,91,0.4);
-          border-radius: 9999px;
-          background: transparent;
-          color: #3d405b;
-          font-family: var(--font-amiri), serif;
-          font-size: 12px;
-          letter-spacing: 0.35em;
-          text-transform: uppercase;
-          cursor: pointer;
-          overflow: hidden;
-          transition: color 0.3s ease, border-color 0.3s ease;
+          gap: 10px;
         }
         .wsh-submit::before {
           content: '';
           position: absolute;
           inset: 0;
-          background: #3d405b;
-          transform: scaleX(0);
-          transform-origin: left;
-          transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+          background: #2a2e1e;
+          transform: scaleY(0);
+          transform-origin: bottom;
+          transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+          z-index: 0;
         }
-        .wsh-submit:hover::before,
-        .wsh-submit:focus::before { transform: scaleX(1); }
-        .wsh-submit:hover, .wsh-submit:focus { color: #f4f1de; border-color: #3d405b; }
-        .wsh-submit span { position: relative; z-index: 1; }
-        .wsh-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-        .wsh-submit:disabled::before { transform: scaleX(0) !important; }
+        .wsh-submit:not(:disabled):hover::before { transform: scaleY(1); }
+        .wsh-submit:not(:disabled):hover { color: #fefae0; box-shadow: 2px 2px 0 0 rgba(42,46,30,0.5); transform: translate(2px,2px); }
+        .wsh-submit:disabled { opacity: 0.35; cursor: not-allowed; }
+        .wsh-submit span { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; }
 
-        /* Wish card */
+        /* ── Wish card ── */
         .wsh-card {
-          border: 1px solid rgba(61,64,91,0.1);
-          border-radius: 4px;
-          padding: 18px 20px;
-          background: rgba(61,64,91,0.025);
-          text-align: left;
-          animation: wshCardIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+          border: 2.5px solid #2a2e1e;
+          border-radius: 6px;
+          padding: 18px 20px 16px;
+          background: #fefae0;
+          box-shadow: 4px 4px 0 0 rgba(42,46,30,0.1), 5px 5px 0 0 #2a2e1e;
+          position: relative;
+          animation: wshCardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        .wsh-card::before {
+          content: '';
+          position: absolute;
+          inset: 6px;
+          border: 1.5px dashed rgba(42,46,30,0.15);
+          border-radius: 3px;
+          pointer-events: none;
         }
         @keyframes wshCardIn {
-          from { opacity: 0; transform: translateY(12px); }
+          from { opacity: 0; transform: translateY(10px); }
           to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* Success checkmark */
-        @keyframes wshCheck {
-          from { transform: scale(0.5); opacity: 0; }
-          to   { transform: scale(1); opacity: 1; }
+        /* ── Avatar initial circle ── */
+        .wsh-avatar {
+          width: 34px; height: 34px;
+          border: 2px solid #2a2e1e;
+          border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0;
+          background: #fefae0;
         }
-        .wsh-check { animation: wshCheck 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
 
-        /* Scroll container wishes list */
+        /* ── Scrollable list ── */
         .wsh-list {
-          max-height: 440px;
+          max-height: 420px;
           overflow-y: auto;
           scrollbar-width: thin;
-          scrollbar-color: rgba(61,64,91,0.2) transparent;
+          scrollbar-color: rgba(42,46,30,0.2) transparent;
         }
         .wsh-list::-webkit-scrollbar { width: 4px; }
         .wsh-list::-webkit-scrollbar-track { background: transparent; }
-        .wsh-list::-webkit-scrollbar-thumb {
-          background: rgba(61,64,91,0.2);
-          border-radius: 2px;
+        .wsh-list::-webkit-scrollbar-thumb { background: rgba(42,46,30,0.2); border-radius: 2px; }
+
+        /* ── Success check anim ── */
+        @keyframes wshCheck { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .wsh-check-anim { animation: wshCheck 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+        /* ── Label style ── */
+        .wsh-label {
+          display: block;
+          color: #a39171;
+          font-size: 9px;
+          letter-spacing: 0.45em;
+          text-transform: uppercase;
+          margin-bottom: 8px;
+          font-family: var(--font-body, sans-serif);
         }
+
+        /* ── Dot divider ── */
+        .w-dot-divider { display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .w-dot-divider span { width: 5px; height: 5px; border-radius: 50%; background: #a39171; display: inline-block; }
+        .w-dot-divider span:nth-child(2) { background: #2a2e1e; opacity: 0.4; }
+        .w-dot-divider span:nth-child(3) { background: #d4a373; }
       `}</style>
 
-      <section
-        ref={sectionRef}
-        className="wsh-section relative bg-[#f4f1de] overflow-hidden px-6 py-24"
-      >
-        {/* Vignette */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at center, transparent 40%, rgba(61,64,91,0.06) 100%)" }}
-        />
+      <section ref={sectionRef} className="wb-bg-wishes overflow-hidden relative py-24 px-6">
 
-        {/* Decorative image top-right */}
-        <div className="absolute -top-8 right-4 md:right-20 w-32 md:w-52 opacity-25 mix-blend-multiply -rotate-90">
-          <div className="wsh-float">
-            <Image src={data.heroImage} alt="" width={400} height={400} className="scale-[2]" />
-          </div>
-        </div>
+        {/* ── Top separator ── */}
+        <div className="w-full h-px" style={{ background: "rgba(42,46,30,0.15)" }} />
 
-        {/* Corner ornaments */}
-        {[
-          "absolute top-8 left-8",
-          "absolute top-8 right-8 scale-x-[-1]",
-          "absolute bottom-8 left-8 scale-y-[-1]",
-          "absolute bottom-8 right-8 scale-[-1]",
-        ].map((cls, i) => (
-          <svg key={i} className={`${cls} w-14 h-14 opacity-12`} viewBox="0 0 80 80" fill="none">
-            <path d="M4 4 L4 28" stroke="#3d405b" strokeWidth="0.8" strokeLinecap="round" />
-            <path d="M4 4 L28 4" stroke="#3d405b" strokeWidth="0.8" strokeLinecap="round" />
-            <circle cx="4" cy="4" r="2" fill="#3d405b" />
-            <path d="M14 14 Q38 4 38 38 Q4 38 14 14Z" stroke="#3d405b" strokeWidth="0.6" fill="none" opacity="0.5" />
-          </svg>
-        ))}
+        {/* ── Floating doodles ── */}
+        <div className="absolute top-8 left-4 w-14 h-12 w-float-a opacity-60 pointer-events-none"><BubbleDoodle className="w-full h-full" /></div>
+        <div className="absolute top-8 right-4 w-12 h-12 w-float-b opacity-55 pointer-events-none"><HeartDoodle className="w-full h-full" /></div>
+        <div className="absolute bottom-24 left-5 w-12 h-12 w-float-c opacity-50 pointer-events-none"><StarDoodle className="w-full h-full" /></div>
+        <div className="absolute bottom-20 right-5 w-12 h-12 w-float-d opacity-50 pointer-events-none"><PenDoodle className="w-full h-full" /></div>
 
-        <div className="relative z-10 max-w-2xl mx-auto flex flex-col gap-12">
+        {/* ── Tape strips (décor) ── */}
+        <div className="wsh-tape w-wiggle" style={{ top: 0, left: "22%", transform: "rotate(-5deg) translateY(-40%)" }} />
+        <div className="wsh-tape w-wiggle" style={{ top: 0, right: "22%", transform: "rotate(4deg) translateY(-40%)" }} />
+
+        <div className="max-w-sm mx-auto relative z-10">
 
           {/* ── Header ── */}
-          <div className="flex flex-col items-center text-center gap-5">
-            <div className="wsh-reveal">
-              <p
-                className="text-[#3d405b] opacity-50 tracking-[0.45em] uppercase"
-                style={{ fontFamily: "var(--font-amiri), serif", fontSize: "11px" }}
-              >
-                Ucapan & Doa
-              </p>
-            </div>
-
-            <div className="wsh-reveal w-full flex items-center gap-4">
-              <div className="wsh-line flex-1 h-px bg-[#3d405b] opacity-20" />
-              <svg className="w-3 h-3 opacity-25 shrink-0" viewBox="0 0 12 12" fill="#3d405b">
-                <path d="M6 0 L7.5 4.5 L12 6 L7.5 7.5 L6 12 L4.5 7.5 L0 6 L4.5 4.5Z" />
-              </svg>
-              <div className="wsh-line flex-1 h-px bg-[#3d405b] opacity-20" />
-            </div>
-
-            <div className="wsh-reveal">
-              <h2
-                className="text-[#3d405b] italic leading-tight"
-                style={{ fontSize: "clamp(26px, 6vw, 40px)" }}
-              >
-                Sampaikan Doamu
-              </h2>
-              <p
-                className="text-[#3d405b] opacity-50 mt-2 leading-relaxed"
-                style={{ fontFamily: "var(--font-amiri), serif", fontSize: "13px" }}
-              >
-                Setiap doa dan ucapan dari Anda adalah hadiah terindah bagi kami.
-              </p>
-            </div>
-          </div>
-          {/* ── Wishes list ── */}
-          <div className="wsh-reveal">
-            {loading ? (
-              <div className="flex justify-center py-10">
-                <svg className="w-6 h-6 animate-spin opacity-30" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" stroke="#3d405b" strokeWidth="1.5" strokeDasharray="31.4" strokeDashoffset="10" />
-                </svg>
-              </div>
-            ) : wishes.length === 0 ? (
-              <p
-                className="text-center text-[#3d405b] opacity-30 py-8 italic"
-                style={{ fontFamily: "var(--font-amiri), serif", fontSize: "14px" }}
-              >
-                Belum ada ucapan. Jadilah yang pertama!
-              </p>
-            ) : (
-              <div className="wsh-list flex flex-col gap-3">
-                {wishes.map((wish) => (
-                  <div key={wish.id} className="wsh-card">
-                    <div className="flex items-start justify-between gap-3 mb-2">
-                      <div className="flex items-center gap-2">
-                        {/* Avatar initials */}
-                        <div
-                          className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                          style={{ background: "rgba(61,64,91,0.08)", color: "#3d405b" }}
-                        >
-                          <span style={{ fontSize: "12px", fontFamily: "var(--font-amiri), serif" }}>
-                            {wish.senderName.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                        <div>
-                          <p
-                            className="text-[#3d405b] font-medium"
-                            style={{ fontSize: "13px" }}
-                          >
-                            {wish.senderName}
-                          </p>
-                          <p
-                            className="text-[#3d405b] opacity-35"
-                            style={{ fontFamily: "var(--font-amiri), serif", fontSize: "10px" }}
-                          >
-                            {formatDate(wish.createdAt)}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Attendance badge */}
-                      {ATTENDANCE_LABEL[wish.attendance] && (
-                        <span
-                          className="shrink-0 tracking-[0.2em] uppercase"
-                          style={{
-                            fontFamily: "var(--font-amiri), serif",
-                            fontSize: "9px",
-                            color: ATTENDANCE_LABEL[wish.attendance].color,
-                          }}
-                        >
-                          {ATTENDANCE_LABEL[wish.attendance].label}
-                        </span>
-                      )}
-                    </div>
-
-                    <p
-                      className="text-[#3d405b] opacity-70 leading-relaxed italic"
-                      style={{ fontFamily: "var(--font-amiri), serif", fontSize: "13px" }}
-                    >
-                      &ldquo;{wish.message}&rdquo;
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* ── Form ── */}
-          <div className="wsh-reveal flex flex-col gap-4">
-            {submitted ? (
-              /* Success state */
-              <div className="wsh-check flex flex-col items-center gap-4 py-8">
-                <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
-                  <circle cx="24" cy="24" r="22" stroke="#3d405b" strokeWidth="1" opacity="0.3" />
-                  <path d="M14 24 L21 31 L34 17" stroke="#3d405b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <p
-                  className="text-[#3d405b] italic text-center"
-                  style={{ fontFamily: "var(--font-amiri), serif", fontSize: "16px" }}
-                >
-                ucapan Anda telah tersampaikan.
-                </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="text-[#3d405b] opacity-40 hover:opacity-70 transition-opacity"
-                  style={{ fontFamily: "var(--font-amiri), serif", fontSize: "11px", letterSpacing: "0.3em" }}
-                >
-                  KIRIM LAGI
-                </button>
-              </div>
-            ) : (
-              <>
-                {/* Name */}
-                <input
-                  type="text"
-                  className="wsh-input"
-                  placeholder="Nama Anda"
-                  value={form.senderName}
-                  onChange={(e) => setForm((f) => ({ ...f, senderName: e.target.value }))}
-                  maxLength={60}
-                />
-
-                {/* Message */}
-                <textarea
-                  className="wsh-input"
-                  placeholder="Tuliskan ucapan dan doa untuk kedua mempelai..."
-                  rows={4}
-                  value={form.message}
-                  onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
-                  maxLength={500}
-                />
-
-                {/* Attendance */}
-                <div>
-                  <p
-                    className="text-[#3d405b] opacity-40 mb-2 tracking-[0.3em] uppercase"
-                    style={{ fontFamily: "var(--font-amiri), serif", fontSize: "10px" }}
-                  >
-                    Konfirmasi Kehadiran
-                  </p>
-                  <div className="flex gap-2">
-                    {ATTENDANCE_OPTIONS.map((opt) => (
-                      <button
-                        key={opt.value}
-                        className={`wsh-pill${form.attendance === opt.value ? " active" : ""}`}
-                        onClick={() => setForm((f) => ({ ...f, attendance: opt.value }))}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Error */}
-                {error && (
-                  <p
-                    className="text-[#3d405b] opacity-60"
-                    style={{ fontFamily: "var(--font-amiri), serif", fontSize: "12px" }}
-                  >
-                    ⚠ {error}
-                  </p>
-                )}
-
-                {/* Submit */}
-                <button
-                  className="wsh-submit"
-                  onClick={handleSubmit}
-                  disabled={submitting}
-                >
-                  <span>{submitting ? "Mengirim..." : "Kirim Ucapan"}</span>
-                </button>
-              </>
-            )}
-          </div>
-
-          {/* ── Divider ── */}
-          <div className="wsh-reveal flex items-center gap-4">
-            <div className="wsh-line flex-1 h-px bg-[#3d405b] opacity-15" />
-            <p
-              className="text-[#3d405b] opacity-35 tracking-[0.35em] uppercase shrink-0"
-              style={{ fontFamily: "var(--font-amiri), serif", fontSize: "10px" }}
-            >
-              {loading ? "..." : `${wishes.length} Ucapan`}
+          <div className="text-center pt-8 pb-10">
+            <p style={{ color: "#a39171", fontSize: 10, letterSpacing: "0.6em", textTransform: "uppercase", marginBottom: 12, fontFamily: "var(--font-body, sans-serif)" }}>
+              Ucapan &amp; Doa
             </p>
-            <div className="wsh-line flex-1 h-px bg-[#3d405b] opacity-15" />
+            <h2 style={{ color: "#2a2e1e", fontFamily: "var(--font-display, 'Caveat', cursive)", fontSize: "clamp(2.4rem, 7vw, 3.2rem)", lineHeight: 1.1 }}>
+              Sampaikan Doamu
+            </h2>
+            <div style={{ width: 120, margin: "8px auto 0" }}>
+              <WavyLine color="#d4a373" className="w-full h-3 opacity-70" />
+            </div>
+            {/* Dot divider */}
+            <div className="w-dot-divider" style={{ marginTop: 14 }}>
+              <span /><span /><span />
+            </div>
+            <p style={{ color: "#a39171", fontSize: "0.8rem", marginTop: 14, lineHeight: 1.7, maxWidth: 280, margin: "14px auto 0" }}>
+              Setiap doa dan ucapan dari Anda adalah hadiah terindah bagi kami.
+            </p>
           </div>
 
-          
+          {/* ── Wishes list card ── */}
+          <div style={{ position: "relative", marginBottom: 32 }}>
+            <div className="w-wiggle" style={{
+              position: "absolute", top: -12, left: "50%",
+              transform: "translateX(-50%) rotate(-2deg)",
+              width: 56, height: 20,
+              background: "rgba(212,163,115,0.28)",
+              border: "1.5px solid rgba(212,163,115,0.5)",
+              borderRadius: 3, zIndex: 20,
+            }} />
+
+            <div className="wsh-marker-box" style={{ padding: "28px 20px 22px" }}>
+              <div className="wsh-corner tl" /><div className="wsh-corner tr" />
+              <div className="wsh-corner bl" /><div className="wsh-corner br" />
+
+              {/* Count header */}
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, position: "relative", zIndex: 1 }}>
+                <div style={{ flex: 1, height: 1, background: "rgba(42,46,30,0.15)" }} />
+                <p style={{ color: "#a39171", fontSize: 9, letterSpacing: "0.4em", textTransform: "uppercase", fontFamily: "var(--font-body, sans-serif)", flexShrink: 0 }}>
+                  {loading ? "memuat..." : `${wishes.length} ucapan`}
+                </p>
+                <div style={{ flex: 1, height: 1, background: "rgba(42,46,30,0.15)" }} />
+              </div>
+
+              {loading ? (
+                <div style={{ display: "flex", justifyContent: "center", padding: "24px 0" }}>
+                  <svg className="animate-spin" style={{ width: 24, height: 24, opacity: 0.3 }} viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="#2a2e1e" strokeWidth="1.5" strokeDasharray="31.4" strokeDashoffset="10" />
+                  </svg>
+                </div>
+              ) : wishes.length === 0 ? (
+                <p style={{ textAlign: "center", fontFamily: "var(--font-display, 'Caveat', cursive)", fontSize: "1.1rem", color: "#a39171", padding: "20px 0", position: "relative", zIndex: 1 }}>
+                  Belum ada ucapan.<br/>Jadilah yang pertama!
+                </p>
+              ) : (
+                <div className="wsh-list" style={{ display: "flex", flexDirection: "column", gap: 16, position: "relative", zIndex: 1 }}>
+                  {wishes.map((wish) => (
+                    <div key={wish.id} className="wsh-card">
+                      <div className="wsh-corner tl" /><div className="wsh-corner tr" />
+                      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10, marginBottom: 10, position: "relative", zIndex: 1 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <div className="wsh-avatar">
+                            <span style={{ fontFamily: "var(--font-display, 'Caveat', cursive)", fontSize: "1rem", color: "#2a2e1e" }}>
+                              {wish.senderName.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                          <div>
+                            <p style={{ fontFamily: "var(--font-display, 'Caveat', cursive)", fontSize: "1.05rem", color: "#2a2e1e", lineHeight: 1.2 }}>
+                              {wish.senderName}
+                            </p>
+                            <p style={{ fontFamily: "var(--font-body, sans-serif)", fontSize: "10px", color: "#a39171", marginTop: 2 }}>
+                              {formatDate(wish.createdAt)}
+                            </p>
+                          </div>
+                        </div>
+                        {ATTENDANCE_LABEL[wish.attendance] && (
+                          <span style={{
+                            fontFamily: "var(--font-body, sans-serif)",
+                            fontSize: "9px",
+                            letterSpacing: "0.3em",
+                            textTransform: "uppercase",
+                            color: ATTENDANCE_LABEL[wish.attendance].color,
+                            flexShrink: 0,
+                            marginTop: 4,
+                          }}>
+                            {ATTENDANCE_LABEL[wish.attendance].label}
+                          </span>
+                        )}
+                      </div>
+                      <p style={{
+                        fontFamily: "var(--font-display, 'Caveat', cursive)",
+                        fontSize: "1rem",
+                        color: "#a39171",
+                        lineHeight: 1.55,
+                        position: "relative",
+                        zIndex: 1,
+                      }}>
+                        &ldquo;{wish.message}&rdquo;
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── Form card ── */}
+          <div style={{ position: "relative" }}>
+            <div className="w-wiggle" style={{
+              position: "absolute", top: -12, left: "50%",
+              transform: "translateX(-50%) rotate(2deg)",
+              width: 64, height: 20,
+              background: "rgba(212,163,115,0.28)",
+              border: "1.5px solid rgba(212,163,115,0.5)",
+              borderRadius: 3, zIndex: 20,
+            }} />
+
+            <div className="wsh-marker-box" style={{ padding: "36px 24px 28px" }}>
+              <div className="wsh-corner tl" /><div className="wsh-corner tr" />
+              <div className="wsh-corner bl" /><div className="wsh-corner br" />
+
+              {submitted ? (
+                <div className="wsh-check-anim" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, padding: "16px 0", position: "relative", zIndex: 1 }}>
+                  <div style={{ width: 52, height: 52 }}>
+                    <CheckDoodle className="w-full h-full" />
+                  </div>
+                  <h3 style={{ fontFamily: "var(--font-display, 'Caveat', cursive)", fontSize: "2rem", color: "#2a2e1e", marginBottom: 4 }}>
+                    Terima Kasih!
+                  </h3>
+                  <p style={{ fontFamily: "var(--font-display, 'Caveat', cursive)", fontSize: "1rem", color: "#a39171", textAlign: "center", lineHeight: 1.5 }}>
+                    Ucapan Anda telah tersampaikan.
+                  </p>
+                  <div className="w-dot-divider" style={{ marginTop: 4 }}>
+                    <span /><span /><span />
+                  </div>
+                  <button
+                    onClick={() => setSubmitted(false)}
+                    style={{
+                      fontFamily: "var(--font-display, 'Caveat', cursive)",
+                      fontSize: "0.95rem",
+                      letterSpacing: "0.15em",
+                      background: "transparent",
+                      border: "none",
+                      color: "#a39171",
+                      cursor: "pointer",
+                      marginTop: 4,
+                      textDecoration: "underline",
+                      textDecorationStyle: "dotted",
+                    }}
+                  >
+                    Kirim Lagi
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: 18, position: "relative", zIndex: 1 }}>
+                  {/* Name */}
+                  <div>
+                    <label className="wsh-label">Nama Lengkap</label>
+                    <input
+                      type="text"
+                      className="wsh-input"
+                      placeholder="Nama Anda"
+                      value={form.senderName}
+                      onChange={(e) => setForm((f) => ({ ...f, senderName: e.target.value }))}
+                      maxLength={60}
+                    />
+                  </div>
+
+                  {/* Message */}
+                  <div>
+                    <label className="wsh-label">Ucapan &amp; Doa</label>
+                    <textarea
+                      className="wsh-input"
+                      placeholder="Tuliskan ucapan dan doa untuk kedua mempelai..."
+                      rows={4}
+                      value={form.message}
+                      onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                      maxLength={500}
+                    />
+                  </div>
+
+                  {/* Attendance */}
+                  <div>
+                    <label className="wsh-label">Konfirmasi Kehadiran</label>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+                      {ATTENDANCE_OPTIONS.map((opt) => (
+                        <button
+                          key={opt.value}
+                          className={`wsh-attend-btn${form.attendance === opt.value ? " active" : ""}`}
+                          onClick={() => setForm((f) => ({ ...f, attendance: opt.value }))}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Error */}
+                  {error && (
+                    <p style={{ fontFamily: "var(--font-display, 'Caveat', cursive)", fontSize: "0.95rem", color: "#c97a7a" }}>
+                      ⚠ {error}
+                    </p>
+                  )}
+
+                  {/* Submit */}
+                  <button className="wsh-submit" onClick={handleSubmit} disabled={submitting}>
+                    <span>
+                      <svg style={{ width: 18, height: 18, flexShrink: 0 }} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                      </svg>
+                      {submitting ? "Mengirim..." : "Kirim Ucapan"}
+                    </span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── Footer dots ── */}
+          <div className="w-dot-divider" style={{ marginTop: 36 }}>
+            <span /><span /><span />
+          </div>
 
         </div>
+
+        {/* ── Bottom separator ── */}
+        <div className="w-full h-px mt-16" style={{ background: "rgba(42,46,30,0.15)" }} />
+
       </section>
     </>
   );

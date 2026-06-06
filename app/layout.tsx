@@ -1,19 +1,18 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import localFont from "next/font/local";
-import { Geist } from "next/font/google";
+import { Caveat, Nunito } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { Amiri } from "next/font/google";
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
-const brightDusty = localFont({
-  src: "../font/Bright-Dusty.otf",
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["400", "500", "600", "700"],
 });
 
-const amiri = Amiri({
-  subsets: ["arabic"],
-  weight: ["400", "700"],
-  variable: "--font-amiri",
+const nunito = Nunito({
+  subsets: ["latin"],
+  variable: "--font-body",
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -38,12 +37,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={cn("font-sans", geist.variable)}>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      </head>
-      <body className={`${brightDusty.className} ${amiri.variable}`}>{children}</body>
+    <html lang="id" className={cn(caveat.variable, nunito.variable)}>
+      <body className="font-body">{children}</body>
     </html>
   );
 }

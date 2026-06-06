@@ -5,7 +5,7 @@ import { StaticImageData } from "next/image";
 import HeroSection from "@/app/Components/HeroSection";
 import CoupleSection from "@/app/Components/CoupleSection";
 import EventSection from "@/app/Components/EventSection";
-import DressCodeSection from "@/app/Components/DressCodeSection";
+// import DressCodeSection from "@/app/Components/DressCodeSection";
 import GiftSection from "@/app/Components/GiftSection";
 import ClosingSection from "@/app/Components/ClosingSection";
 import CountdownSection from "@/app/Components/CountDownSection";
@@ -127,7 +127,7 @@ export default function InvitationPageClient({ guestName, data }: Props) {
       <CoupleSection data={data} />
       <CountdownSection targetDate={data.weddingDate} />
       <EventSection data={data} />
-      <DressCodeSection data={data} />
+      {/* <DressCodeSection data={data} /> */}
       <GiftSection data={data} />
       <WishesSection data={data} guestName={guestName} />
       <ClosingSection data={data} />
