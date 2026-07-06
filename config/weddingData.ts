@@ -24,14 +24,14 @@ export const weddingData = {
     akad: {
       day: "Sabtu",
       date: "16 Agustus 2026",
-      time: "08.00 – 10.00 WIB",
+      time: "08.00 – 9.00 WIB",
       venue: "ONYX Guesthouse",
       address: "Jl. Desa Jelegong No.51, Jelegong, Kec. Rancaekek, Kabupaten Bandung",
     },
     resepsi: {
       day: "Sabtu",
       date: "16 Agustus 2026",
-      time: "11.00 – 14.00 WIB",
+      time: "10.00 – 15.00 WIB",
       venue: "ONYX Guesthouse",
       address: "Jl. Desa Jelegong No.51, Jelegong, Kec. Rancaekek, Kabupaten Bandung",
     },
@@ -39,7 +39,7 @@ export const weddingData = {
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.3995829375795!2d107.7729179!3d-6.9621007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68c5eb2c22ddd9%3A0x1b91576c2b444cbe!2sONYX%20Guesthouse!5e0!3m2!1sid!2sid!4v1780749991548!5m2!1sid!2sid",
     googleMapsUrl: "https://maps.app.goo.gl/Fn1xnNdAUDqvRHfVA",
     dressCode: {
-      theme: "Winter Grey",
+      theme: "Earthy Harmony",
       description:
         "Kami mengharapkan para tamu hadir dengan busana semi formal bernuansa sage green dan dusty rose, atau warna-warna pastel yang lembut dan elegan.",
       avoidColors: ["Merah Menyala", "kuning", "ungu"],

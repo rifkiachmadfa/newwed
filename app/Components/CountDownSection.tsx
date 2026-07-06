@@ -116,7 +116,7 @@ export default function CountdownSection({ targetDate }: Props) {
 
         /* Cream grid background */
         .wb-bg-cd {
-          background-color: #fefae0;
+          background-color: #f4f6eb;
           background-image:
             linear-gradient(rgba(42,46,30,0.07) 1px, transparent 1px),
             linear-gradient(90deg, rgba(42,46,30,0.07) 1px, transparent 1px);

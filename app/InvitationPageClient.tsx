@@ -13,6 +13,7 @@ import EnvelopeOpener from "@/app/Components/EnvelopeOpener";
 import QuotesSection from "@/app/Components/QuotesSection";
 import WishesSection from "@/app/Components/WishesSection";
 import { Volume2, VolumeX } from "lucide-react";
+import DressCodeSection from "./Components/DressCodeSection";
 
 interface WeddingData {
     heroImage: string | StaticImageData;
@@ -127,7 +128,7 @@ export default function InvitationPageClient({ guestName, data }: Props) {
       <CoupleSection data={data} />
       <CountdownSection targetDate={data.weddingDate} />
       <EventSection data={data} />
-      {/* <DressCodeSection data={data} /> */}
+      <DressCodeSection data={data} />
       <GiftSection data={data} />
       <WishesSection data={data} guestName={guestName} />
       <ClosingSection data={data} />

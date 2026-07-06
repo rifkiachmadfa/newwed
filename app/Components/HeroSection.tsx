@@ -104,115 +104,60 @@ const WavyLine = ({ color = "#a39171" }: { color?: string }) => (
   </svg>
 );
 
-// ── Photo Frame Component (sketchy polaroid style) ───────────────
-const PhotoFrame = ({
-  src,
-  alt,
-  rotate = 0,
-}: {
-  src: string;
-  alt: string;
-  rotate?: number;
-}) => (
-  <div
-    style={{
-      transform: `rotate(${rotate}deg)`,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      filter: "drop-shadow(3px 5px 0px rgba(42,46,30,0.22))",
-    }}
+// ── Scribble frame — hand-drawn wobbly loop around the couple photo ──
+const ScribbleFrame = () => (
+  <svg
+    viewBox="0 0 300 360"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-full h-full"
+    preserveAspectRatio="none"
   >
-    <div
-      style={{
-        background: "#fefae0",
-        border: "2px solid #2a2e1e",
-        borderRadius: "3px",
-        padding: "2px 2px 2px 2px",
-        position: "relative",
-        boxShadow: "2px 2px 0 0 #2a2e1e",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: "2px",
-          border: "1px dashed rgba(42,46,30,0.2)",
-          borderRadius: "1px",
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-      />
-      {[
-        { top: 3, left: 3, borderWidth: "1px 0 0 1px" },
-        { top: 3, right: 3, borderWidth: "1px 1px 0 0" },
-        { bottom: 10, left: 3, borderWidth: "0 0 1px 1px" },
-        { bottom: 10, right: 3, borderWidth: "0 1px 1px 0" },
-      ].map((style, i) => (
-        <div
-          key={i}
-          style={{
-            position: "absolute",
-            width: 4,
-            height: 4,
-            borderColor: "#d4a373",
-            borderStyle: "solid",
-            opacity: 0.7,
-            zIndex: 2,
-            ...style,
-          }}
-        />
-      ))}
-
-      {/* Photo area — slightly larger now that lineart is full-width */}
-      <div
-        style={{
-          width: 36,
-          height: 40,
-          overflow: "hidden",
-          position: "relative",
-          borderRadius: "2px",
-        }}
-      >
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          sizes="36px"
-          style={{
-            objectFit: "cover",
-            objectPosition: "center top",
-            filter: "sepia(20%) contrast(1.05)",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(135deg, rgba(212,163,115,0.12) 0%, transparent 60%, rgba(42,46,30,0.08) 100%)",
-            mixBlendMode: "multiply",
-          }}
-        />
-      </div>
-
-    </div>
-
-    <div
-      style={{
-        position: "absolute",
-        top: -5,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: 18,
-        height: 8,
-        background: "rgba(212,163,115,0.35)",
-        border: "1px solid rgba(212,163,115,0.6)",
-        borderRadius: "2px",
-        zIndex: 10,
-      }}
+    <path
+      d="M60 18
+         Q20 10 16 55
+         Q6 120 14 190
+         Q4 250 20 300
+         Q34 338 90 344
+         Q160 352 220 340
+         Q272 330 284 275
+         Q296 200 286 130
+         Q292 60 250 30
+         Q190 4 130 12
+         Q90 16 60 18 Z"
+      stroke="var(--gold)"
+      strokeWidth="5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+      pathLength="100"
+      style={{ strokeDasharray: 100, strokeDashoffset: 100 }}
+      className="frame-draw"
     />
-  </div>
+    {/* second looser inner scribble for hand-drawn feel */}
+    <path
+      d="M70 26
+         Q34 22 28 62
+         Q18 124 26 186
+         Q18 244 32 292
+         Q46 322 92 330
+         Q158 338 214 328
+         Q260 318 270 268
+         Q280 198 272 136
+         Q278 74 242 42
+         Q186 16 132 22
+         Q98 24 70 26 Z"
+      stroke="var(--forest)"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+      opacity="0.35"
+      pathLength="100"
+      style={{ strokeDasharray: 100, strokeDashoffset: 100 }}
+      className="frame-draw frame-draw-delay"
+    />
+  </svg>
 );
 
 // ── Component ────────────────────────────────────────────────────
@@ -241,7 +186,7 @@ export default function HeroSection({ guestName, data }: Props) {
     <>
       <style>{`
         :root {
-          --bg    : #fefae0;
+          --bg    : #f4f6eb;
           --forest: #2a2e1e;
           --gold  : #d4a373;
           --muted : #a39171;
@@ -317,6 +262,7 @@ export default function HeroSection({ guestName, data }: Props) {
           border-color: var(--gold);
           border-style: solid;
           opacity: 0.65;
+          z-index: 20;
         }
         .corner-mark.tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
         .corner-mark.tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; }
@@ -330,33 +276,13 @@ export default function HeroSection({ guestName, data }: Props) {
         }
         @keyframes drawHeart { to { stroke-dashoffset: 0; } }
 
-        /* Marker tip animation */
-        .marker-tip {
-          position: absolute;
-          top: 0; left: 0;
-          width: 4px;
-          height: 100%;
-          background: linear-gradient(
-            to bottom,
-            transparent 0%,
-            rgba(42,46,30,0.55) 20%,
-            rgba(212,163,115,0.8) 50%,
-            rgba(42,46,30,0.55) 80%,
-            transparent 100%
-          );
-          border-radius: 2px;
-          animation: markerTip 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-          animation-delay: 0.3s;
-          opacity: 0;
-          pointer-events: none;
-          z-index: 30;
+        /* Scribble frame draw */
+        .frame-draw {
+          animation: drawFrame 2.2s ease forwards;
+          animation-delay: 0.5s;
         }
-        @keyframes markerTip {
-          0%   { left: 0%;   opacity: 0; }
-          3%   { opacity: 1; }
-          96%  { opacity: 1; }
-          100% { left: 100%; opacity: 0; }
-        }
+        .frame-draw-delay { animation-delay: 0.75s; }
+        @keyframes drawFrame { to { stroke-dashoffset: 0; } }
 
         /* Doodle floats */
         @keyframes floatA {
@@ -392,7 +318,7 @@ export default function HeroSection({ guestName, data }: Props) {
           background: rgba(212,163,115,0.28);
           border: 1.5px solid rgba(212,163,115,0.5);
           border-radius: 3px;
-          z-index: 20;
+          z-index: 40;
         }
 
         /* CTA Button */
@@ -431,44 +357,57 @@ export default function HeroSection({ guestName, data }: Props) {
         .dot-divider span:nth-child(2) { background: var(--forest); opacity: 0.4; }
         .dot-divider span:nth-child(3) { background: var(--gold); }
 
-        /* Lineart image */
-        .lineart-img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-          object-position: center bottom;
-          mix-blend-mode: multiply;
-          display: block;
+        /* Couple photo float animation */
+        @keyframes coupleFloat {
+          0%,100% { transform: translateY(0) rotate(-1.5deg); }
+          50%      { transform: translateY(-8px) rotate(-1.5deg); }
         }
+        .couple-float { animation: coupleFloat 5.5s ease-in-out infinite; }
 
-        /* Photo float animation */
-        @keyframes photoFloat {
-          0%,100% { transform: translateY(0); }
-          50%      { transform: translateY(-6px); }
-        }
-        .photo-float-left  { animation: photoFloat 5s ease-in-out infinite; }
-        .photo-float-right { animation: photoFloat 5.8s ease-in-out infinite 0.4s; }
-
-        /* ── Full-width lineart block ── */
-        .lineart-fullwidth {
-          /* sits outside the card, full section width, z-index above card */
+        /* ── Couple photo + scribble frame block ──
+           Now lives INSIDE the card, in normal flow, so it pushes
+           the text below it instead of overlapping. No negative margins. */
+        .couple-frame-wrap {
           position: relative;
-          width: 100vw;
-          max-width: 480px;   /* cap on wide screens so it stays readable */
-          z-index: 30;
-          /* push it down slightly so the bottom edge visually "enters" the card */
-          margin-bottom: -60px;
+          width: 190px;
+          max-width: 58%;
+          aspect-ratio: 3/3.6;
+          margin: 4px auto 4px auto;
+          z-index: 5;
+        }
+        .couple-photo-inner {
+          position: absolute;
+          inset: 18% 15% 24% 15%;
+          overflow: hidden;
+          border-radius: 46% 46% 42% 42% / 50% 50% 34% 34%;
+          box-shadow: 0 6px 14px rgba(42,46,30,0.18);
+        }
+        .couple-photo-inner::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(212,163,115,0.12) 0%, transparent 60%, rgba(42,46,30,0.08) 100%);
+          mix-blend-mode: multiply;
+        }
+        .couple-photo-img {
+          object-fit: cover;
+          object-position: center top;
+          filter: sepia(15%) contrast(1.05);
+        }
+        .scribble-frame-overlay {
+          position: absolute;
+          inset: 0;
           pointer-events: none;
+          z-index: 5;
         }
 
-        /* Card gets extra top padding so text starts below the lineart overlap */
+        /* Card top padding — just enough for corner marks + photo margin */
         .card-top-space {
-          /* 60px overlap already accounted for; just add breathing room */
-          padding-top: 32px;
+          padding-top: 28px;
         }
       `}</style>
 
-      <section className="wb-bg relative min-h-screen flex flex-col items-center justify-center overflow-hidden py-20">
+      <section className="wb-bg relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-8 pb-20">
 
         {/* ── Floating Doodles ── */}
         <div className="absolute top-6 left-4 w-20 h-24 float-a opacity-75"><BouquetDoodle /></div>
@@ -477,101 +416,6 @@ export default function HeroSection({ guestName, data }: Props) {
         <div className="absolute bottom-24 right-6 w-20 h-14 float-d opacity-65"><BowtieDoodle /></div>
         <div className="absolute left-3 top-1/2 -translate-y-1/2 w-16 h-12 float-a opacity-50"><EnvelopeDoodle /></div>
         <div className="absolute right-3 top-1/2 -translate-y-1/2 w-16 h-10 float-b opacity-50"><RingsDoodle /></div>
-
-        {/* ══════════════════════════════════════════════════
-            LINEART — full-width, OUTSIDE the card,
-            floats above the card via z-index + negative margin
-        ══════════════════════════════════════════════════ */}
-        <div className="lineart-fullwidth">
-          {/* Lineart clip-reveal */}
-          <motion.div
-            initial={{ clipPath: "inset(0 100% 0 0 round 2px)", opacity: 0 }}
-            animate={{ clipPath: "inset(0 0% 0 0 round 2px)", opacity: 1 }}
-            transition={{ duration: 2.4, ease: "easeInOut", delay: 0.4 }}
-            style={{
-              position: "relative",
-              width: "100%",
-              aspectRatio: "1320/860",
-            }}
-          >
-            <Image
-              src="/lineartmain.png"
-              alt="Ilustrasi couple"
-              fill
-              sizes="(max-width: 480px) 100vw, 480px"
-              className="lineart-img"
-              style={{ position: "absolute", inset: 0 }}
-            />
-            {/* Marker sweep tip */}
-            <div className="marker-tip" />
-          </motion.div>
-
-          {/* ── Photo overlays on lineart faces ── */}
-          <div
-            style={{
-              position: "absolute",
-              top: 0, left: 0,
-              width: "100%",
-              aspectRatio: "1320/860",
-              pointerEvents: "none",
-            }}
-          >
-            {/* GROOM photo */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.7, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "backOut", delay: 2.0 }}
-              className="photo-float-left"
-              style={{
-                position: "absolute",
-                left: "37%",
-                top: "20%",
-                pointerEvents: "auto",
-                zIndex: 10,
-              }}
-            >
-              <PhotoFrame src="/yono.jpeg" alt="Groom" rotate={-4} />
-            </motion.div>
-
-            {/* BRIDE photo */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.7, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "backOut", delay: 2.3 }}
-              className="photo-float-right"
-              style={{
-                position: "absolute",
-                right: "40%",
-                top: "24%",
-                pointerEvents: "auto",
-                zIndex: 10,
-              }}
-            >
-              <PhotoFrame src="/nana.jpeg" alt="Bride" rotate={4} />
-            </motion.div>
-          </div>
-        </div>
-
-        {/* ── Tape strips on card top ── */}
-        <div
-          className="tape wiggle"
-          style={{
-            position: "relative",
-            zIndex: 35,
-            transform: "rotate(-5deg) translateY(50%)",
-            left: "-22%",
-          }}
-        />
-        <div
-          className="tape wiggle"
-          style={{
-            position: "relative",
-            zIndex: 35,
-            transform: "rotate(4deg) translateY(50%)",
-            left: "22%",
-            marginTop: "-22px",
-          }}
-        />
 
         {/* ── Main Card ── */}
         <div
@@ -584,9 +428,33 @@ export default function HeroSection({ guestName, data }: Props) {
           <div className="corner-mark br" />
 
           {/* ══════════════════════════════════════════════════
+              COUPLE PHOTO — single image, scribble frame around it
+              placed inside the card, in flow, above the greeting text
+          ══════════════════════════════════════════════════ */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: -12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "backOut", delay: 0.4 }}
+            className="couple-frame-wrap couple-float"
+          >
+            <div className="couple-photo-inner">
+              <Image
+                src="/couple.png"
+                alt="Couple"
+                fill
+                sizes="190px"
+                className="couple-photo-img"
+              />
+            </div>
+            <div className="scribble-frame-overlay">
+              <ScribbleFrame />
+            </div>
+          </motion.div>
+
+          {/* ══════════════════════════════════════════════════
               KEPADA YTH. — kata sambutan
           ══════════════════════════════════════════════════ */}
-          <div className="stagger-2 mb-5">
+          <div className="stagger-2 mb-5 mt-4">
             <p
               className="text-[10px] tracking-[0.45em] uppercase mb-2"
               style={{ color: "var(--muted)", fontFamily: "var(--font-body, sans-serif)" }}

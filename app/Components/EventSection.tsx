@@ -318,7 +318,7 @@ export default function EventSection({ data }: Props) {
     <>
       <style>{`
         /* ── Hero Palette ──
-          --bg    : #fefae0  (cream background)
+          --bg    : #f4f6eb  (cream background)
           --forest: #2a2e1e  (dark forest — teks & border)
           --gold  : #d4a373  (gold accent)
           --muted : #a39171  (muted gold accent)
@@ -326,7 +326,7 @@ export default function EventSection({ data }: Props) {
 
         /* Cream grid background */
         .wb-bg-ev {
-          background-color: #fefae0;
+          background-color: #f4f6eb;
           background-image:
             linear-gradient(rgba(42,46,30,0.07) 1px, transparent 1px),
             linear-gradient(90deg, rgba(42,46,30,0.07) 1px, transparent 1px);

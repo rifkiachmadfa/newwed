@@ -16,11 +16,11 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "Undangan Pernikahan Ayu & Rifki",
+  title: "Undangan Pernikahan Nana & Yono",
   description: "Kami dengan penuh kebahagiaan mengundang Anda untuk menyaksikan momen sakral pernikahan kami.",
   openGraph: {
-    title: "Undangan Pernikahan Ayu & Rifki",
-    description: "Sabtu, 4 April 2026 — Sumedang, Jawa Barat",
+    title: "Undangan Pernikahan Nana & Yono",
+    description: "Sabtu, 16 Agustus 2026 — Bandung, Jawa Barat",
     images: [
       {
         url: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=630&fit=crop",
