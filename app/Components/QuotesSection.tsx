@@ -84,6 +84,56 @@ const PenDoodle = ({ className }: { className?: string }) => (
   </svg>
 );
 
+// ── Small framed photo (with tape) ─────────────────────────────────
+//
+// FIX: sebelumnya kotak foto pakai tinggi fixed (`w-20 h-28 md:w-24 md:h-32`)
+// + `object-contain object-top`, sehingga foto bisa tidak mengisi penuh kotak
+// kalau rasionya beda. Sekarang kotak pakai `aspect-[4/5]` (rasio potret) dan
+// foto pakai `object-cover` supaya selalu penuh, dengan `focalPoint` untuk
+// menggeser titik fokus crop (mis. supaya wajah tidak terpotong).
+
+const MiniFramedPhoto = ({
+  src,
+  alt,
+  tapeRotate,
+  focalPoint = "center 20%",
+}: {
+  src: string;
+  alt: string;
+  tapeRotate: string;
+  focalPoint?: string;
+}) => (
+  <div className="relative">
+    <div
+      className="tape-q wiggle"
+      style={{ top: -10, left: "50%", transform: `translateX(-50%) rotate(${tapeRotate})` }}
+    />
+    <div
+      style={{
+        border: "3px solid #2a2e1e",
+        borderRadius: 4,
+        boxShadow: "4px 4px 0 0 rgba(42,46,30,0.12), 5px 5px 0 0 #2a2e1e",
+        background: "#fefae0",
+        padding: 4,
+      }}
+    >
+      <div
+        className="relative w-20 md:w-24 overflow-hidden rounded-sm"
+        style={{ aspectRatio: "4 / 5" }}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover"
+          style={{ objectPosition: focalPoint }}
+          sizes="96px"
+        />
+      </div>
+    </div>
+  </div>
+);
+
 // ── Main Component ─────────────────────────────────────────────────
 
 export default function QuotesSection() {
@@ -344,24 +394,7 @@ export default function QuotesSection() {
           {showPhotos && (
             <div className="flex items-end justify-center gap-10 mb-10 relative z-20">
               <div className="photo-left">
-                <div className="relative">
-                  <div
-                    className="tape-q wiggle"
-                    style={{ top: -10, left: "50%", transform: "translateX(-50%) rotate(-4deg)" }}
-                  />
-                  <div
-                    className="relative w-20 h-28 md:w-24 md:h-32"
-                    style={{
-                      border: "3px solid #2a2e1e",
-                      borderRadius: 4,
-                      boxShadow: "4px 4px 0 0 rgba(42,46,30,0.12), 5px 5px 0 0 #2a2e1e",
-                      background: "#fefae0",
-                      padding: 4,
-                    }}
-                  >
-                    <Image src="/nana.jpeg" alt="Wanita" fill className="object-contain object-top" />
-                  </div>
-                </div>
+                <MiniFramedPhoto src="/nana.jpeg" alt="Wanita" tapeRotate="-4deg" />
               </div>
 
               {/* Ampersand */}
@@ -371,24 +404,7 @@ export default function QuotesSection() {
               </div>
 
               <div className="photo-right">
-                <div className="relative">
-                  <div
-                    className="tape-q wiggle"
-                    style={{ top: -10, left: "50%", transform: "translateX(-50%) rotate(3deg)" }}
-                  />
-                  <div
-                    className="relative w-20 h-28 md:w-24 md:h-32"
-                    style={{
-                      border: "3px solid #2a2e1e",
-                      borderRadius: 4,
-                      boxShadow: "4px 4px 0 0 rgba(42,46,30,0.12), 5px 5px 0 0 #2a2e1e",
-                      background: "#fefae0",
-                      padding: 4,
-                    }}
-                  >
-                    <Image src="/yono.jpeg" alt="Pria" fill className="object-contain object-top" />
-                  </div>
-                </div>
+                <MiniFramedPhoto src="/yono.jpeg" alt="Pria" tapeRotate="3deg" />
               </div>
             </div>
           )}

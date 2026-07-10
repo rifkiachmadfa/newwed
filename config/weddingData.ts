@@ -29,7 +29,7 @@ export const weddingData = {
       address: "Jl. Desa Jelegong No.51, Jelegong, Kec. Rancaekek, Kabupaten Bandung",
     },
     resepsi: {
-      day: "Sabtu",
+      day: "Minggu",
       date: "16 Agustus 2026",
       time: "10.00 – 15.00 WIB",
       venue: "ONYX Guesthouse",
@@ -37,7 +37,7 @@ export const weddingData = {
     },
     googleMapsEmbed:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.3995829375795!2d107.7729179!3d-6.9621007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68c5eb2c22ddd9%3A0x1b91576c2b444cbe!2sONYX%20Guesthouse!5e0!3m2!1sid!2sid!4v1780749991548!5m2!1sid!2sid",
-    googleMapsUrl: "https://maps.app.goo.gl/Fn1xnNdAUDqvRHfVA",
+    googleMapsUrl: "https://maps.app.goo.gl/AuXzMBgaAhgFvHy6A",
     dressCode: {
       theme: "Earthy Harmony",
       description:

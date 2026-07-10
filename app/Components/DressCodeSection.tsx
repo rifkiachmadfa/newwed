@@ -327,10 +327,10 @@ export default function DressCodeSection({ data }: Props) {
             })}
           </div>
 
-          <div className="dc-divider dc-stagger dc-stagger-5 w-16 h-px bg-[#4e4c35] opacity-30 mx-auto mb-10 mt-6" />
+          {/* <div className="dc-divider dc-stagger dc-stagger-5 w-16 h-px bg-[#4e4c35] opacity-30 mx-auto mb-10 mt-6" /> */}
 
           {/* Avoid colors */}
-          <div className="dc-stagger dc-stagger-6 mb-14">
+          {/* <div className="dc-stagger dc-stagger-6 mb-14">
             <p className="text-[#4e4c35] text-[10px] tracking-[0.5em] uppercase mb-5 opacity-60">
               Mohon Hindari Warna
             </p>
@@ -339,7 +339,7 @@ export default function DressCodeSection({ data }: Props) {
                 <span key={c} className="dc-avoid-badge">{c}</span>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Male / Female cards — konsisten marker-box HeroSection
           <div className="dc-stagger dc-stagger-7 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto">

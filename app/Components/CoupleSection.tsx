@@ -203,15 +203,30 @@ const PersonCard = ({
 };
 
 // ── Photo with marker-box frame ───────────────────────────────────
+//
+// FIX: sebelumnya pakai `w-52 md:w-64 h-72 md:h-88` (tinggi FIXED) + `object-contain`.
+// Kalau rasio foto asli tidak sama persis dengan rasio kotak itu, foto tidak akan
+// benar-benar "penuh" mengisi frame (ada jarak/ruang kosong di sisi tertentu).
+//
+// Perbaikan:
+// 1. Kotak foto sekarang pakai `aspect-[4/5]` (rasio potret standar) alih-alih
+//    tinggi fixed, jadi proporsinya konsisten di semua ukuran layar.
+// 2. `object-contain` diganti `object-cover` supaya foto SELALU mengisi penuh
+//    kotak (sedikit crop di bagian yang berlebih, bukan menyisakan ruang kosong).
+// 3. `objectPosition` bisa diatur per foto lewat prop `focalPoint` kalau bagian
+//    penting fotonya (wajah) perlu digeser (misal foto lebih tinggi dari wajah
+//    ada di tengah, bukan di atas).
 
 const FramedPhoto = ({
   src,
   alt,
   direction,
+  focalPoint = "center 20%", // geser titik fokus crop, mis. "center top" / "center 15%"
 }: {
   src: string;
   alt: string;
   direction: "left" | "right";
+  focalPoint?: string;
 }) => (
   <motion.div
     className="flex justify-center px-6 py-8"
@@ -256,6 +271,7 @@ const FramedPhoto = ({
             borderColor: "#d4a373",
             borderStyle: "solid",
             opacity: 0.65,
+            zIndex: 10,
             ...(pos === "tl" ? { top: 10, left: 10, borderWidth: "2px 0 0 2px" } : {}),
             ...(pos === "tr" ? { top: 10, right: 10, borderWidth: "2px 2px 0 0" } : {}),
             ...(pos === "bl" ? { bottom: 10, left: 10, borderWidth: "0 0 2px 2px" } : {}),
@@ -263,8 +279,20 @@ const FramedPhoto = ({
           }}
         />
       ))}
-      <div className="relative w-52 md:w-64 h-72 md:h-88">
-        <Image src={src} alt={alt} fill className="object-contain object-top" />
+
+      {/* Kotak foto: lebar responsif + rasio 4:5 tetap, foto mengisi penuh (object-cover) */}
+      <div
+        className="relative w-52 md:w-64 overflow-hidden rounded-sm"
+        style={{ aspectRatio: "4 / 5" }}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover"
+          style={{ objectPosition: focalPoint }}
+          sizes="(min-width: 768px) 256px, 208px"
+        />
       </div>
     </div>
   </motion.div>
