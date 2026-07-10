@@ -3,7 +3,7 @@ import heroImage from "../public/Asset3.svg";
 
 export const weddingData = {
     groom: {
-      name: "Bamboo",
+      name: "Yono",
       fullName: "Yono Sumarno",
       photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
       father: "Bapak Sutarto",
@@ -11,7 +11,7 @@ export const weddingData = {
       instagram : ""
     },
     bride: {
-      name: "Nanachan",
+      name: "Khaharani",
       fullName: "Khaharani Sumadwiyanti",
       photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face",
       father: "Bapak Ano Sumarno (Alm)",
