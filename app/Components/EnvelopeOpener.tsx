@@ -542,10 +542,10 @@ export default function EnvelopeOpener({ guestName, onOpen }: Props) {
                   <div className="addr-line" style={{width:52}}/>
                 </div>
 
-                {/* Sticky note */}
+                {/* Sticky note
                 <div className="sticky">
                   jangan<br/>dibuka<br/>dulu! 🤫
-                </div>
+                </div> */}
 
                 {/* Marker doodle — small heart bottom-center */}
                 <svg
