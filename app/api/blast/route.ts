@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       `_Catatan: Undangan Terbatas_\n\n`+
       `Merupakan suatu kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\n\n` +
       `*Wassalamu'alaikum Wr. Wb.*\n` +
-      `Rifki & Ayu 💍`;
+      `Khaharani & Yono 💍`;
 
     const phone = guest.phone
       .replace(/\D/g, "")
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       body: new URLSearchParams({
         target: phone,
         message,
-        url: "https://res.cloudinary.com/dzjydhoc7/image/upload/v1774542023/thumbnail_hun2qp.png",
+        url: "https://res.cloudinary.com/dzjydhoc7/image/upload/v1784378310/couple_rwujja.png",
         countryCode: "62",
       }),
     });
