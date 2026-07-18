@@ -22,7 +22,7 @@ export const weddingData = {
     coupleImage: "./public/image/Asset3.jpg",
     weddingDate: "2026-08-16T08:00:00",
     akad: {
-      day: "Sabtu",
+      day: "Minggu",
       date: "16 Agustus 2026",
       time: "08.00 – 9.00 WIB",
       venue: "ONYX Guesthouse",
