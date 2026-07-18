@@ -20,10 +20,10 @@ export const metadata: Metadata = {
   description: "Kami dengan penuh kebahagiaan mengundang Anda untuk menyaksikan momen sakral pernikahan kami.",
   openGraph: {
     title: "Undangan Pernikahan Nana & Yono",
-    description: "Sabtu, 16 Agustus 2026 — Bandung, Jawa Barat",
+    description: "Minggu, 16 Agustus 2026 — Bandung, Jawa Barat",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=630&fit=crop",
+        url: "https://res.cloudinary.com/dzjydhoc7/image/upload/v1784378310/couple_rwujja.png",
         width: 1200,
         height: 630,
       },

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "Undangan Khaharani & Yono",
       images: [
         {
-          url: "https://weddinginvnana.vercel.app/couple.png", // ← foto/banner pernikahan
+          url: "https://res.cloudinary.com/dzjydhoc7/image/upload/v1784378310/couple_rwujja.png", // ← foto/banner pernikahan
           width: 1080,
           height: 1080,
           alt: "Undangan Pernikahan Khaharani & Yono",
