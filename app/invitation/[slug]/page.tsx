@@ -12,16 +12,16 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // ambil data guest berdasarkan slug jika perlu personalisasi
   return {
-    title: "Undangan Pernikahan Rifki & Ayu",
+    title: "Undangan Pernikahan Khaharani & Yono",
     description: "Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk hadir di hari bahagia kami.",
     openGraph: {
-      title: "Undangan Pernikahan Rifki & Ayu 💍",
+      title: "Undangan Pernikahan Khaharani & Yono",
       description: "Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk hadir di hari bahagia kami.",
-      url: `https://weddinginv-w7x9.vercel.app/invitation/${params.slug}`,
-      siteName: "Undangan Rifki & Ayu",
+      url: `https://weddinginvnana.vercel.app/invitation/${params.slug}`,
+      siteName: "Undangan Khaharani & Yono",
       images: [
         {
-          url: "https://weddinginv-w7x9.vercel.app/thumbnail.png", // ← foto/banner pernikahan
+          url: "https://weddinginvnana.vercel.app/couple.png", // ← foto/banner pernikahan
           width: 1080,
           height: 1080,
           alt: "Undangan Pernikahan Rifki & Ayu",

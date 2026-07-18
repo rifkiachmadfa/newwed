@@ -142,7 +142,7 @@ export default function DashboardPage() {
               <h1 className="text-lg font-semibold text-[#3a2e28] tracking-tight">
                 Dashboard Undangan
               </h1>
-              <p className="text-xs text-[#9e8e82]">Rifki & Ayu — 4 April 2026</p>
+              <p className="text-xs text-[#9e8e82]">Khaharani & Yono</p>
             </div>
           </div>
           <Badge variant="secondary" className="bg-rose-50 text-rose-600 border-rose-100">
