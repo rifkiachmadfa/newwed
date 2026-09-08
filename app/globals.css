@@ -50,17 +50,22 @@
 
 :root {
   /* ── Invitation theme tokens ──────────────────────────────────────
-     Single source of truth for the wedding invitation's "hand-drawn
-     notebook" art direction (hero, envelope opener, doodles, etc).
+     Single source of truth for the wedding invitation's premium,
+     cinematic art direction (hero, envelope opener, every section).
      Namespaced with `invitation-` so section components share one
      consistent palette instead of each re-declaring its own :root
      override (which previously caused later-mounted components to
-     silently clobber earlier ones, e.g. the envelope's cream tone). */
-  --invitation-cream: #fefae0;
-  --invitation-bg: #f4f6eb;
-  --invitation-forest: #2a2e1e;
-  --invitation-gold: #d4a373;
-  --invitation-muted: #a39171;
+     silently clobber earlier ones, e.g. the envelope's cream tone).
+     Palette moved from the earlier "hand-drawn notebook" mustard/olive
+     scheme to a refined ivory + gold + ink scheme matching the
+     Luxury 2 reference: warm ivory paper, aged gold accents, deep
+     ink type, soft taupe for supporting text. */
+  --invitation-cream: #faf6ee;
+  --invitation-bg: #f7f2e6;
+  --invitation-forest: #2b241a;
+  --invitation-gold: #b8935a;
+  --invitation-gold-soft: #e4cfa1;
+  --invitation-muted: #8c8172;
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -142,5 +147,29 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer utilities {
+  /* Shared premium type treatment — used anywhere a small uppercase
+     label needs the refined, wide-tracked look (kickers, eyebrow
+     text, section labels). Centralized here instead of every section
+     repeating the same tracking/opacity combo inline. */
+  .text-kicker {
+    font-family: var(--font-body, sans-serif);
+    letter-spacing: 0.42em;
+    color: var(--invitation-muted);
+  }
+
+  /* Soft radial vignette background for full-bleed hero-style
+     sections — an ivory paper glow instead of the earlier graph-paper
+     grid texture, driven purely by CSS (no image asset, no JS). */
+  .bg-luxury-vignette {
+    background-color: var(--invitation-bg);
+    background-image: radial-gradient(
+      ellipse 80% 60% at 50% 20%,
+      var(--invitation-cream) 0%,
+      var(--invitation-bg) 70%
+    );
   }
 }
