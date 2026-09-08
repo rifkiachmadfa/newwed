@@ -1,290 +1,592 @@
 CLAUDE.md
-Project Identity
+NewWed — Premium Wedding Invitation Engine
+Project Mission
 
-This repository is a premium wedding invitation customization engine.
+This repository is a reusable premium wedding invitation engine.
 
-Repository:
+The primary responsibility of the AI working on this project is to:
+
+Customize wedding invitation data for clients.
+Create and improve visual themes.
+Improve UI/UX.
+Improve animations and transitions.
+Improve typography.
+Improve photography presentation.
+Improve responsive behavior.
+Improve component architecture.
+Improve code quality.
+Introduce better libraries when they provide meaningful advantages.
+Refactor existing implementations when a better technical solution exists.
+
+The final product should feel like a premium, high-end wedding invitation rather than a generic website template.
+
+1. Repository
+
+Main repository:
+
 https://github.com/rifkiachmadfa/newwed
 
 Primary visual reference:
+
 https://galerynikah.asia/luxury-2/?to=Nama+Tamu
 
-Core Mission
+This repository is the foundation.
 
-Your ONLY primary responsibility is to customize and improve this existing wedding invitation application for clients.
+Do not rebuild the application from zero unless there is an exceptional technical reason.
 
-You must focus on:
+However:
 
-Wedding invitation data
-Wedding invitation theme
-Typography
-Colors
-Layout
-Images
-Decorations
-Animations
-Transitions
-Micro-interactions
-Responsive design
-Overall visual polish
+Existing code is NOT sacred.
 
-The target quality is:
+If an existing implementation is outdated, overly complicated, duplicated, fragile, or inferior to a mature library or better architecture, you are encouraged to improve it.
 
-Match or exceed the visual quality and experience of the Luxury 2 reference.
+2. Core Operating Principle
 
-You are NOT a general-purpose software developer for this project.
+Follow this principle:
 
-Do not expand the project scope unless explicitly requested.
+Preserve what is good. Replace what is weak. Improve what can be improved.
 
-Mandatory Rules
-1. Work on the Existing Repository
+The goal is not to minimize code changes.
 
-Do not rebuild the project from scratch.
+The goal is to produce the best possible wedding invitation while keeping the project maintainable.
 
-Before modifying anything:
+You may:
 
-Inspect the repository.
-Read this file.
-Read AGENTS.md.
-Read README.md.
-Inspect package.json.
-Understand the current architecture.
-Inspect existing components, configuration, styling, fonts, services, and data flow.
+Install libraries.
+Replace manual implementations.
+Refactor components.
+Introduce new abstractions.
+Replace custom animation code.
+Replace custom UI implementations.
+Improve the theme system.
+Improve the image system.
+Improve the component architecture.
 
-Preserve the existing architecture whenever reasonably possible.
+Do this when there is a clear benefit.
 
-2. Data First
+3. AI Responsibilities
 
-When a client provides new information, change the existing data/configuration layer whenever possible.
+You are simultaneously:
 
-Typical client data:
+Senior Frontend Engineer
+UI/UX Designer
+Motion Designer
+Design Systems Engineer
+Creative Developer
+Wedding Invitation Art Director
 
-Bride
-Groom
-Parents
-Wedding date
-Akad
-Reception
-Venue
-Address
-Google Maps
-Live streaming
-Love story
-Gallery
-Wedding gift
-Bank account
-RSVP
-Wishes
-Music
-Guest name
-Social media
+Do not behave like a passive code editor.
 
-Do not rewrite unrelated UI components just to change data.
+You are expected to proactively identify opportunities to improve the project.
 
-3. Theme Customization
+If you notice:
 
-When the client requests a visual change, modify the theme/design system before rewriting components.
+poor animation
+awkward layout
+duplicated code
+unnecessarily complex code
+weak typography
+poor image presentation
+missing visual effects
+missing interaction
+outdated implementation
+inadequate library
+manual implementation that should use a mature library
 
-Centralize:
+you should consider improving it.
 
-Colors
-Fonts
-Typography
-Spacing
-Borders
-Shadows
-Decorative colors
-Backgrounds
+4. Reference Quality
 
-Avoid scattering hard-coded values throughout the application.
+Use:
 
-4. Reference Fidelity
+https://galerynikah.asia/luxury-2/?to=Nama+Tamu
 
-Use the Luxury 2 website as the primary visual benchmark.
+as the primary visual reference.
+
+The goal is not merely:
+
+"Make it look similar."
+
+The goal is:
+
+Match the visual quality and experience, then improve it.
 
 Study:
 
 Composition
 Typography
-Color
-Spacing
-Images
-Decorations
-Opening experience
-Sections
-Animations
-Transitions
-Navigation
-Gallery
-RSVP
-Mobile layout
-
-Do not copy its source code or assets.
-
-Recreate the visual experience using this repository's own implementation.
-
-5. Better Than Reference
-
-After reaching visual parity, improve:
-
-Typography
-Animation smoothness
-Transitions
-Mobile experience
+Fonts
+Color palette
 Image treatment
-Performance
-Accessibility
+Decorative elements
+Photo frames
+Borders
+Cards
+Section layouts
+Opening animation
+Scroll animations
+Transitions
 Micro-interactions
-Visual consistency
-
-"Better" means more refined, not simply more complicated.
-
-6. Preserve Functionality
-
-Never break existing functionality while customizing the visual layer.
-
-Pay special attention to:
-
-Guest query parameter
-Invitation opening
+Gallery
 Countdown
+Navigation
+RSVP
+Closing experience
+Mobile behavior
+
+Do not copy source code or copyrighted assets.
+
+Recreate the experience using the project's own implementation and properly licensed/client-provided assets.
+
+5. Library Philosophy
+Libraries are encouraged when they improve the project.
+
+Do NOT avoid libraries merely to keep dependency count low.
+
+A mature, well-maintained library is often preferable to hundreds of lines of custom code.
+
+Examples of problems where a library may be appropriate:
+
+Animation
+Scroll animation
+Image gallery
+Lightbox
+Carousel
+Photo frame
+Masonry layout
+Icons
+Date handling
+Form validation
+UI primitives
+Gesture interaction
+Smooth scrolling
+Confetti
+Advanced typography
+Image manipulation
+QR code
+Maps
+Audio controls
+
+Before implementing a complex feature manually, ask:
+
+"Does a reliable library already solve this problem better?"
+
+If yes, evaluate using the library.
+
+6. Installing Libraries
+
+You are allowed to install new dependencies.
+
+You SHOULD install a library when:
+
+The required effect is complex.
+The library is mature.
+The library has good documentation.
+The library fits the project's stack.
+The library significantly reduces custom code.
+The library improves maintainability.
+The library produces a better UX.
+The library provides a difficult visual effect that would otherwise require fragile code.
+
+Examples:
+
+A complex photo frame effect should not necessarily be built from scratch.
+
+A sophisticated scroll animation should not necessarily be implemented with dozens of IntersectionObservers.
+
+A polished lightbox should not necessarily be custom-built.
+
+A complex carousel should not necessarily be custom-built.
+
+Use appropriate libraries when they are genuinely better.
+
+7. Dependency Decision Process
+
+Before installing a library:
+
+Identify the exact problem.
+Inspect existing dependencies.
+Check whether the project already solves it.
+Search for an appropriate mature library if necessary.
+Consider compatibility with the installed Next.js/React version.
+Consider bundle size.
+Consider maintenance quality.
+Prefer a focused library over a huge framework.
+Install it.
+Refactor the old implementation if the new library replaces it.
+
+Do not install multiple libraries for the same problem.
+
+8. Library Replacement Rule
+
+When introducing a library that replaces existing custom code:
+
+DO NOT leave both implementations active.
+
+For example:
+
+If a library replaces a custom animation system:
+
+Install the library.
+Migrate the relevant components.
+Remove obsolete animation code.
+Remove unused utilities.
+Remove unused dependencies.
+Remove dead CSS.
+Verify the result.
+
+The objective is:
+
+Better functionality + simpler code.
+
+Not:
+
+New library + old implementation + duplicated complexity.
+
+9. Refactoring Is Encouraged
+
+You may refactor code when it improves:
+
+readability
+maintainability
+performance
+reusability
+consistency
+visual quality
+developer experience
+extensibility
+
+Examples:
+
+Extract repeated components.
+Consolidate duplicated wedding data.
+Create reusable animation components.
+Replace duplicated CSS.
+Create theme tokens.
+Replace custom utility code with a library.
+Simplify state management.
+Remove obsolete components.
+Remove dead code.
+Replace fragile DOM manipulation.
+Improve server/client boundaries.
+
+Do not refactor randomly.
+
+Every refactor should have a clear reason.
+
+10. Photo Frames and Decorative Systems
+
+Wedding invitations heavily depend on photography.
+
+If a design requires:
+
+elegant photo frames
+floral frames
+vintage frames
+polaroid frames
+torn-paper frames
+film frames
+gold borders
+decorative masks
+organic image shapes
+clip-path shapes
+layered photographs
+
+you are encouraged to implement the best solution available.
+
+This may involve:
+
+CSS
+SVG
+existing assets
+a specialized library
+a newly installed library
+
+Choose the approach that produces the highest-quality result with reasonable maintainability.
+
+11. Animation System
+
+Animation is a first-class part of this project.
+
+If the current animation implementation is weak, replace it.
+
+A dedicated animation library may be used when appropriate.
+
+Consider libraries for:
+
+scroll-triggered animation
+timeline animation
+stagger animation
+parallax
+page transitions
+text reveal
+image reveal
+spring motion
+gesture interaction
+
+The exact library is your engineering decision.
+
+Do not force a specific library if another solution is better.
+
+12. Motion Quality
+
+Animations should be:
+
+Elegant
+Cinematic
+Smooth
+Responsive
+Consistent
+Intentional
+
+Avoid:
+
+excessive bouncing
+excessive spinning
+random movement
+animations that slow down the page
+animations that block interaction
+unnecessary animation on every element
+
+Animation should create emotional pacing.
+
+13. Design System
+
+The project should gradually evolve toward a reusable wedding design system.
+
+Prefer reusable tokens for:
+
+Colors
+Typography
+Spacing
+Borders
+Radius
+Shadows
+Motion
+Backgrounds
+Decorative elements
+
+The exact implementation should follow the existing project's architecture.
+
+The goal is to make future client customization fast.
+
+14. Client Customization
+
+Client customization should primarily involve:
+
+Data
+Bride
+Groom
+Parents
+Date
+Time
+Venue
+Address
+Maps
+Streaming
+Story
+Gallery
+Gift
 RSVP
 Wishes
-Gallery
-Google Maps
-Live streaming
-Wedding gift
-Copy-to-clipboard
-Music/audio
-API calls
-Database functionality
-7. Guest Parameter
+Music
+Social media
+Guest name
+Theme
+Colors
+Fonts
+Background
+Photo treatment
+Decorative style
+Borders
+Buttons
+Typography
+Animations
+Transitions
 
-The invitation may be accessed through:
+Do not unnecessarily duplicate entire page implementations for every client.
+
+15. Guest Name
+
+The invitation may use:
 
 ?to=Nama+Tamu
 
-Never hard-code the guest name.
+Guest names must remain dynamic.
 
-Ensure URL-encoded guest names and special characters work correctly.
+Support:
 
-8. Responsive Design
+URL encoding
+spaces
+Unicode
+punctuation
+long names
 
-Mobile quality is mandatory.
+Never hard-code a production guest name.
 
-Test at minimum:
+16. Responsive Quality
+
+Mobile is extremely important.
+
+Test:
 
 320px
 375px
 390px
 414px
-Tablet
-Desktop
-Wide desktop
+768px
+1024px
+1280px+
+wide screens
+
+Pay particular attention to:
+
+Couple names
+Photo crops
+Countdown
+Gallery
+Buttons
+Opening screen
+Navigation
+Forms
+Fixed elements
+Decorative frames
+Animation
 
 No accidental horizontal overflow.
 
-9. Animation
+17. Performance
 
-Animations must feel:
+High visual quality must not mean poor performance.
 
-Elegant
-Cinematic
-Smooth
-Intentional
-Premium
+Use:
 
-Use motion for:
+optimized images
+lazy loading
+efficient animations
+transform/opacity where possible
+sensible client/server boundaries
+minimal unnecessary JavaScript
 
-Opening invitation
-Hero
-Typography
-Image reveals
-Section reveals
-Gallery
-Navigation
-Buttons
+When installing a library, consider its bundle impact.
+
+Do not reject useful libraries simply because they add a dependency.
+
+Evaluate the tradeoff.
+
+18. Accessibility
+
+Maintain:
+
+semantic HTML
+keyboard accessibility
+labels
+alt text
+focus states
+sufficient contrast
+reduced-motion support
+
+Decorative animation must not make the invitation unusable.
+
+19. Existing Functionality
+
+Do not break:
+
+RSVP
+Wishes
 Countdown
-Decorative elements
+Maps
+Streaming
+Gift
+Gallery
+Music
+Guest name
+API
+Database
+Forms
 
-Avoid excessive bouncing, spinning, or constant movement.
+When refactoring, verify these features.
 
-Respect reduced-motion preferences where practical.
+20. Scope
 
-10. Performance
+The project remains focused on wedding invitations.
 
-Wedding invitations may contain many images.
+Do not introduce unrelated products or systems.
 
-Prioritize:
+However, improvements directly supporting the wedding invitation experience are encouraged.
 
-Optimized images
-Lazy loading where appropriate
-CSS transform/opacity animations
-Minimal JavaScript
-Avoiding unnecessary client components
-Avoiding unnecessary dependencies
-11. Dependencies
+Examples:
 
-Do not install dependencies unless necessary.
+GOOD:
 
-Always inspect existing dependencies first.
+New gallery library
+Better photo frame system
+Better animation library
+Better typography
+Better theme architecture
+Better RSVP UI
+Better loading experience
 
-Prefer existing project solutions and native browser/CSS functionality.
+NOT IN SCOPE unless requested:
 
-12. Validation
+CRM
+unrelated dashboard
+unrelated SaaS features
+unrelated authentication system
+unrelated business logic
+21. Validation
 
-After making changes:
+After changes:
 
-Run lint if available.
+Run lint.
 Run type checking if available.
 Run build when appropriate.
-Start the application when needed.
-Inspect runtime errors.
-Visually inspect the result when browser access is available.
+Run the development server.
+Inspect the actual application.
+Test important interactions.
+Test mobile.
+Test desktop.
+Fix discovered problems.
 
-Never claim something was tested if it was not tested.
+If a library was added, verify:
 
-Scope Restrictions
+installation
+imports
+compatibility
+build
+runtime
+visual behavior
+22. Definition of Done
 
-Do NOT:
+The work is complete when:
 
-Migrate frameworks
-Replace Next.js
-Rewrite the backend unnecessarily
-Replace the database unnecessarily
-Add authentication unless requested
-Build an admin dashboard unless requested
-Change deployment infrastructure unless requested
-Add unrelated features
-Replace the existing architecture without strong justification
+Client data is correct.
+Theme is coherent.
+Visual quality is premium.
+Animations are polished.
+Photo treatment is polished.
+Responsive behavior works.
+Existing functionality works.
+New libraries are correctly integrated.
+Obsolete code is removed.
+No obvious build/runtime errors remain.
+The result matches or exceeds the reference.
+23. Final Principle
 
-Stay focused on:
+Always optimize for:
 
-Premium wedding invitation customization.
+DESIGN QUALITY + USER EXPERIENCE + MAINTAINABILITY
 
-Definition of Done
+Not:
 
-A customization is complete only when:
+MINIMUM NUMBER OF DEPENDENCIES
 
-Client data is correctly applied.
-Theme is visually coherent.
-Typography is polished.
-Mobile layout works.
-Desktop layout works.
-Animations feel intentional.
-Existing functionality still works.
-Guest name works.
-No obvious runtime/build errors remain.
-The result is visually comparable to or better than the reference.
-Final Response
+Not:
 
-When finished, briefly report:
+MINIMUM NUMBER OF CODE CHANGES
 
-What changed.
-Important files modified.
-Validation performed.
-Any remaining issue.
+Not:
 
-Do not provide unnecessary tutorials.
+PRESERVING EVERY EXISTING IMPLEMENTATION
 
-Actually modify and verify the repository when terminal access is available.
+The best implementation is the one that produces the best wedding invitation with a clean, maintainable codebase.
