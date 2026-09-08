@@ -49,14 +49,19 @@
 }
 
 :root {
-  --whiteboard: #f7f9fc;
-  --grid-line: #dce6f0;
-  --marker-dark: #1a1f3a;
-  --marker-blue: #2563eb;
-  --marker-red: #dc2626;
-  --marker-green: #16a34a;
-  --marker-yellow: #ca8a04;
-  --marker-pink: #db2777;
+  /* ── Invitation theme tokens ──────────────────────────────────────
+     Single source of truth for the wedding invitation's "hand-drawn
+     notebook" art direction (hero, envelope opener, doodles, etc).
+     Namespaced with `invitation-` so section components share one
+     consistent palette instead of each re-declaring its own :root
+     override (which previously caused later-mounted components to
+     silently clobber earlier ones, e.g. the envelope's cream tone). */
+  --invitation-cream: #fefae0;
+  --invitation-bg: #f4f6eb;
+  --invitation-forest: #2a2e1e;
+  --invitation-gold: #d4a373;
+  --invitation-muted: #a39171;
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -130,7 +135,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    background-color: var(--whiteboard);
+    /* Matches the envelope opener's cream so there's no flash of a
+       mismatched color before hydration or while content is loading. */
+    background-color: var(--invitation-cream);
     @apply bg-background text-foreground;
   }
   html {

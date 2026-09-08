@@ -14,45 +14,42 @@ interface Props {
   };
 }
 
-// ── Palette
-// #fefae0  background cream
-// #2a2e1e  dark forest
-// #d4a373  gold accent
-// #a39171  muted gold
-
 // ── Doodles ─────────────────────────────────────────────────────
+// All strokes reference the centralized invitation theme tokens
+// (see globals.css) instead of hardcoded hex values, so the palette
+// stays consistent and can be retheme'd from one place.
 
 const RingsDoodle = () => (
   <svg viewBox="0 0 90 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <circle cx="30" cy="25" r="18" stroke="#d4a373" strokeWidth="3" strokeLinecap="round" />
-    <circle cx="30" cy="25" r="12" stroke="#d4a373" strokeWidth="1.5" strokeDasharray="3 3" />
-    <path d="M30 10 L34 15 L30 18 L26 15 Z" stroke="#d4a373" strokeWidth="1.5" fill="none" />
-    <circle cx="60" cy="25" r="18" stroke="#2a2e1e" strokeWidth="3" strokeLinecap="round" />
-    <circle cx="60" cy="25" r="12" stroke="#2a2e1e" strokeWidth="1.5" strokeDasharray="3 3" />
-    <path d="M60 10 L64 15 L60 18 L56 15 Z" stroke="#2a2e1e" strokeWidth="1.5" fill="none" />
-    <path d="M42 25 Q45 20 48 25 Q45 30 42 25" stroke="#d4a373" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+    <circle cx="30" cy="25" r="18" stroke="var(--gold)" strokeWidth="3" strokeLinecap="round" />
+    <circle cx="30" cy="25" r="12" stroke="var(--gold)" strokeWidth="1.5" strokeDasharray="3 3" />
+    <path d="M30 10 L34 15 L30 18 L26 15 Z" stroke="var(--gold)" strokeWidth="1.5" fill="none" />
+    <circle cx="60" cy="25" r="18" stroke="var(--forest)" strokeWidth="3" strokeLinecap="round" />
+    <circle cx="60" cy="25" r="12" stroke="var(--forest)" strokeWidth="1.5" strokeDasharray="3 3" />
+    <path d="M60 10 L64 15 L60 18 L56 15 Z" stroke="var(--forest)" strokeWidth="1.5" fill="none" />
+    <path d="M42 25 Q45 20 48 25 Q45 30 42 25" stroke="var(--gold)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
   </svg>
 );
 
 const BowtieDoodle = () => (
   <svg viewBox="0 0 80 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <path d="M40 25 L10 8 L10 42 Z" stroke="#2a2e1e" strokeWidth="2.5" strokeLinejoin="round" fill="none" />
-    <path d="M40 25 L70 8 L70 42 Z" stroke="#2a2e1e" strokeWidth="2.5" strokeLinejoin="round" fill="none" />
-    <circle cx="40" cy="25" r="5" stroke="#2a2e1e" strokeWidth="2" fill="none" />
-    <path d="M18 15 L32 22" stroke="#2a2e1e" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
-    <path d="M18 35 L32 28" stroke="#2a2e1e" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
-    <path d="M62 15 L48 22" stroke="#2a2e1e" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
-    <path d="M62 35 L48 28" stroke="#2a2e1e" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
+    <path d="M40 25 L10 8 L10 42 Z" stroke="var(--forest)" strokeWidth="2.5" strokeLinejoin="round" fill="none" />
+    <path d="M40 25 L70 8 L70 42 Z" stroke="var(--forest)" strokeWidth="2.5" strokeLinejoin="round" fill="none" />
+    <circle cx="40" cy="25" r="5" stroke="var(--forest)" strokeWidth="2" fill="none" />
+    <path d="M18 15 L32 22" stroke="var(--forest)" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
+    <path d="M18 35 L32 28" stroke="var(--forest)" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
+    <path d="M62 15 L48 22" stroke="var(--forest)" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
+    <path d="M62 35 L48 28" stroke="var(--forest)" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
   </svg>
 );
 
 const HeelsDoodle = () => (
   <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <path d="M15 52 Q35 58 60 52 L62 56 Q38 64 12 56 Z" stroke="#a39171" strokeWidth="2" fill="none" strokeLinejoin="round" />
-    <path d="M60 52 L66 38 L62 38 L58 52" stroke="#a39171" strokeWidth="2" fill="none" strokeLinejoin="round" />
-    <path d="M15 52 Q12 38 22 28 Q34 18 50 22 Q60 26 60 38 L60 52" stroke="#a39171" strokeWidth="2" fill="none" strokeLinecap="round" />
-    <path d="M22 34 Q36 28 52 32" stroke="#a39171" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeDasharray="3 2" />
-    <path d="M34 22 Q38 16 40 22 Q42 16 46 22" stroke="#a39171" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+    <path d="M15 52 Q35 58 60 52 L62 56 Q38 64 12 56 Z" stroke="var(--muted)" strokeWidth="2" fill="none" strokeLinejoin="round" />
+    <path d="M60 52 L66 38 L62 38 L58 52" stroke="var(--muted)" strokeWidth="2" fill="none" strokeLinejoin="round" />
+    <path d="M15 52 Q12 38 22 28 Q34 18 50 22 Q60 26 60 38 L60 52" stroke="var(--muted)" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path d="M22 34 Q36 28 52 32" stroke="var(--muted)" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeDasharray="3 2" />
+    <path d="M34 22 Q38 16 40 22 Q42 16 46 22" stroke="var(--muted)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
   </svg>
 );
 
@@ -60,42 +57,42 @@ const HeartDoodle = () => (
   <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
     <path
       d="M40 58 C30 48, 8 38, 8 20 C8 10, 16 4, 24 4 C30 4, 36 8, 40 14 C44 8, 50 4, 56 4 C64 4, 72 10, 72 20 C72 38, 50 48, 40 58Z"
-      stroke="#a39171" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+      stroke="var(--muted)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
       fill="none" pathLength="100"
       style={{ strokeDasharray: 100, strokeDashoffset: 100 }}
       className="heart-draw"
     />
-    <path d="M40 50 C34 44, 18 36, 18 24" stroke="#a39171" strokeWidth="1.2" strokeLinecap="round" opacity="0.4" fill="none" />
+    <path d="M40 50 C34 44, 18 36, 18 24" stroke="var(--muted)" strokeWidth="1.2" strokeLinecap="round" opacity="0.4" fill="none" />
   </svg>
 );
 
 const BouquetDoodle = () => (
   <svg viewBox="0 0 70 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <path d="M35 60 Q32 72 30 82" stroke="#2a2e1e" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-    <path d="M35 60 Q38 68 42 76" stroke="#2a2e1e" strokeWidth="2" strokeLinecap="round" fill="none" />
-    <path d="M30 72 Q20 68 22 60 Q28 66 30 72" stroke="#2a2e1e" strokeWidth="1.5" fill="none" />
-    <path d="M38 68 Q48 62 48 54 Q40 60 38 68" stroke="#2a2e1e" strokeWidth="1.5" fill="none" />
-    <path d="M28 62 Q35 66 42 62" stroke="#d4a373" strokeWidth="2" strokeLinecap="round" fill="none" />
-    <circle cx="35" cy="30" r="6" stroke="#a39171" strokeWidth="2" fill="none" />
-    <circle cx="20" cy="38" r="5" stroke="#a39171" strokeWidth="2" fill="none" />
-    <circle cx="50" cy="38" r="5" stroke="#a39171" strokeWidth="2" fill="none" />
-    <circle cx="35" cy="30" r="2" stroke="#d4a373" strokeWidth="1.5" fill="none" />
-    <circle cx="20" cy="38" r="2" stroke="#d4a373" strokeWidth="1.5" fill="none" />
-    <circle cx="50" cy="38" r="2" stroke="#d4a373" strokeWidth="1.5" fill="none" />
+    <path d="M35 60 Q32 72 30 82" stroke="var(--forest)" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+    <path d="M35 60 Q38 68 42 76" stroke="var(--forest)" strokeWidth="2" strokeLinecap="round" fill="none" />
+    <path d="M30 72 Q20 68 22 60 Q28 66 30 72" stroke="var(--forest)" strokeWidth="1.5" fill="none" />
+    <path d="M38 68 Q48 62 48 54 Q40 60 38 68" stroke="var(--forest)" strokeWidth="1.5" fill="none" />
+    <path d="M28 62 Q35 66 42 62" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" fill="none" />
+    <circle cx="35" cy="30" r="6" stroke="var(--muted)" strokeWidth="2" fill="none" />
+    <circle cx="20" cy="38" r="5" stroke="var(--muted)" strokeWidth="2" fill="none" />
+    <circle cx="50" cy="38" r="5" stroke="var(--muted)" strokeWidth="2" fill="none" />
+    <circle cx="35" cy="30" r="2" stroke="var(--gold)" strokeWidth="1.5" fill="none" />
+    <circle cx="20" cy="38" r="2" stroke="var(--gold)" strokeWidth="1.5" fill="none" />
+    <circle cx="50" cy="38" r="2" stroke="var(--gold)" strokeWidth="1.5" fill="none" />
   </svg>
 );
 
 const EnvelopeDoodle = () => (
   <svg viewBox="0 0 80 56" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <rect x="4" y="8" width="72" height="48" rx="3" stroke="#2a2e1e" strokeWidth="2.5" fill="none" />
-    <path d="M4 8 L40 34 L76 8" stroke="#2a2e1e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    <path d="M4 56 L28 34" stroke="#2a2e1e" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-    <path d="M76 56 L52 34" stroke="#2a2e1e" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-    <circle cx="40" cy="40" r="8" stroke="#d4a373" strokeWidth="2" fill="none" />
+    <rect x="4" y="8" width="72" height="48" rx="3" stroke="var(--forest)" strokeWidth="2.5" fill="none" />
+    <path d="M4 8 L40 34 L76 8" stroke="var(--forest)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <path d="M4 56 L28 34" stroke="var(--forest)" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+    <path d="M76 56 L52 34" stroke="var(--forest)" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+    <circle cx="40" cy="40" r="8" stroke="var(--gold)" strokeWidth="2" fill="none" />
   </svg>
 );
 
-const WavyLine = ({ color = "#a39171" }: { color?: string }) => (
+const WavyLine = ({ color = "var(--muted)" }: { color?: string }) => (
   <svg viewBox="0 0 120 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
     <path
       d="M2 10 Q12 2, 22 10 Q32 18, 42 10 Q52 2, 62 10 Q72 18, 82 10 Q92 2, 102 10 Q112 18, 118 10"
@@ -185,11 +182,16 @@ export default function HeroSection({ guestName, data }: Props) {
   return (
     <>
       <style>{`
-        :root {
-          --bg    : #f4f6eb;
-          --forest: #2a2e1e;
-          --gold  : #d4a373;
-          --muted : #a39171;
+        /* Local, scoped aliases to the centralized invitation tokens
+           defined once in globals.css (--invitation-*). Kept as short
+           names here purely to avoid rewriting every var(--x) below;
+           unlike a :root override, these live on .wb-bg itself so they
+           can never leak out and clobber a sibling component's theme. */
+        .wb-bg {
+          --bg    : var(--invitation-bg);
+          --forest: var(--invitation-forest);
+          --gold  : var(--invitation-gold);
+          --muted : var(--invitation-muted);
         }
 
         .wb-bg {
@@ -310,6 +312,19 @@ export default function HeroSection({ guestName, data }: Props) {
         .float-c { animation: floatC 5s ease-in-out infinite; }
         .float-d { animation: floatD 8s ease-in-out infinite; }
         .wiggle   { animation: wiggle 4s ease-in-out infinite; }
+
+        /* Respect the user's motion preference: keep the one-off
+           entrance/reveal animations (they finish and settle), but
+           stop every infinite/looping animation from running forever. */
+        @media (prefers-reduced-motion: reduce) {
+          .float-a, .float-b, .float-c, .float-d, .wiggle, .couple-float {
+            animation: none;
+          }
+          .hero-content,
+          .stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5, .stagger-6 {
+            transition-duration: 0.01ms;
+          }
+        }
 
         /* Tape decoration */
         .tape {
@@ -440,10 +455,11 @@ export default function HeroSection({ guestName, data }: Props) {
             <div className="couple-photo-inner">
               <Image
                 src="/couple.png"
-                alt="Couple"
+                alt={`${data.bride.name} & ${data.groom.name}`}
                 fill
                 sizes="190px"
                 className="couple-photo-img"
+                priority
               />
             </div>
             <div className="scribble-frame-overlay">
@@ -462,7 +478,7 @@ export default function HeroSection({ guestName, data }: Props) {
               Kepada Yth.
             </p>
             <p
-              className="text-2xl font-semibold"
+              className="text-2xl font-semibold break-words px-2"
               style={{ color: "var(--forest)", fontFamily: "var(--font-display, 'Caveat', cursive)" }}
             >
               {guestName}
@@ -487,10 +503,16 @@ export default function HeroSection({ guestName, data }: Props) {
             <HeartDoodle />
           </div>
 
-          {/* Bride name */}
+          {/* Bride name — fluid clamp() sizing (instead of a fixed
+              text-6xl/7xl jump) so long names stay on one line and
+              never overflow narrow screens down to 320px. */}
           <h1
-            className="stagger-4 leading-tight mb-0 text-6xl md:text-7xl"
-            style={{ color: "var(--forest)", fontFamily: "var(--font-display, 'Caveat', cursive)" }}
+            className="stagger-4 leading-tight mb-0 break-words px-2"
+            style={{
+              color: "var(--forest)",
+              fontFamily: "var(--font-display, 'Caveat', cursive)",
+              fontSize: "clamp(2.75rem, 14vw, 4.5rem)",
+            }}
           >
             <span className="sketchy-underline">{data.bride.name}</span>
           </h1>
@@ -505,8 +527,12 @@ export default function HeroSection({ guestName, data }: Props) {
 
           {/* Groom name */}
           <h1
-            className="stagger-4 leading-tight mb-6 text-6xl md:text-7xl"
-            style={{ color: "var(--forest)", fontFamily: "var(--font-display, 'Caveat', cursive)" }}
+            className="stagger-4 leading-tight mb-6 break-words px-2"
+            style={{
+              color: "var(--forest)",
+              fontFamily: "var(--font-display, 'Caveat', cursive)",
+              fontSize: "clamp(2.75rem, 14vw, 4.5rem)",
+            }}
           >
             <span className="sketchy-underline">{data.groom.name}</span>
           </h1>
@@ -525,16 +551,17 @@ export default function HeroSection({ guestName, data }: Props) {
           </p>
         </div>
 
-        {/* ── CTA Button ── */}
+        {/* ── Scroll cue ──
+            Label reads "Lihat Undangan" (not "Buka Undangan") since
+            opening the envelope is what actually reveals the invitation;
+            this button only scrolls further into the page. */}
         <div className="mt-8 stagger-6 content-in">
-          <button onClick={handleScrollDown} className="btn-chalk">
+          <button onClick={handleScrollDown} className="btn-chalk" aria-label="Gulir untuk melihat undangan selengkapnya">
             <span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                />
+              Lihat Undangan
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
-              Buka Undangan
             </span>
           </button>
         </div>
