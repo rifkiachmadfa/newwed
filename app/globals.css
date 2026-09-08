@@ -50,22 +50,18 @@
 
 :root {
   /* ── Invitation theme tokens ──────────────────────────────────────
-     Single source of truth for the wedding invitation's premium,
-     cinematic art direction (hero, envelope opener, every section).
+     Single source of truth for the wedding invitation's minimalist,
+     elegant grey art direction (hero, envelope opener, every section).
      Namespaced with `invitation-` so section components share one
      consistent palette instead of each re-declaring its own :root
-     override (which previously caused later-mounted components to
-     silently clobber earlier ones, e.g. the envelope's cream tone).
-     Palette moved from the earlier "hand-drawn notebook" mustard/olive
-     scheme to a refined ivory + gold + ink scheme matching the
-     Luxury 2 reference: warm ivory paper, aged gold accents, deep
-     ink type, soft taupe for supporting text. */
-  --invitation-cream: #faf6ee;
-  --invitation-bg: #f7f2e6;
-  --invitation-forest: #2b241a;
-  --invitation-gold: #b8935a;
-  --invitation-gold-soft: #e4cfa1;
-  --invitation-muted: #8c8172;
+     override. Palette: soft grey paper, graphite ink, muted silver
+     accents — a quiet, refined monochrome look. */
+--invitation-cream: #fafafa;
+--invitation-bg: #f2f2f0;
+--invitation-forest: #868a8a;
+--invitation-gold: #b0b0aa;
+--invitation-gold-soft: #e2e2de;
+--invitation-muted: #98988f;  
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -164,12 +160,12 @@
   /* Soft radial vignette background for full-bleed hero-style
      sections — an ivory paper glow instead of the earlier graph-paper
      grid texture, driven purely by CSS (no image asset, no JS). */
-  .bg-luxury-vignette {
-    background-color: var(--invitation-bg);
-    background-image: radial-gradient(
-      ellipse 80% 60% at 50% 20%,
-      var(--invitation-cream) 0%,
-      var(--invitation-bg) 70%
-    );
-  }
+.bg-luxury-vignette {
+  background-color: var(--invitation-bg);
+  background-image: radial-gradient(
+    ellipse 80% 60% at 50% 20%,
+    var(--invitation-cream) 0%,
+    var(--invitation-bg) 70%
+  );
+}
 }

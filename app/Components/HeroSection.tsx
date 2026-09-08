@@ -1,12 +1,10 @@
 "use client";
-
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import {
+  AnimatePresence,
   motion,
   useReducedMotion,
-  useScroll,
-  useTransform,
   type Variants,
 } from "framer-motion";
 import { ChevronDown } from "lucide-react";
@@ -15,26 +13,24 @@ interface Props {
   guestName: string;
   data: {
     heroImage: string | StaticImageData;
+    heroGallery?: string[];
     groom: { name: string };
     bride: { name: string };
     akad: { date: string };
   };
 }
 
-// ── Motion variants ─────────────────────────────────────────────
-// All entrance choreography lives here as data, driven by
-// framer-motion's stagger engine — no manual timeouts, no classList
-// toggling, no per-element CSS transition-delay bookkeeping.
+// How long each slide stays on screen before the next one crossfades in.
+const SLIDE_DURATION = 5000;
 
+// ── Motion variants for the text/overlay content ────────────────────
 const container: Variants = {
   hidden: {},
-  show: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
-  },
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.5 } },
 };
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 14 },
   show: {
     opacity: 1,
     y: 0,
@@ -42,129 +38,43 @@ const fadeUp: Variants = {
   },
 };
 
-const frameVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.92 },
-  show: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
-  },
-};
-
-// Path-drawing is a first-class framer-motion feature (animate the
-// `pathLength` of an SVG path) — this replaces the old hand-rolled
-// stroke-dasharray/stroke-dashoffset keyframes entirely.
-const drawPath: Variants = {
-  hidden: { pathLength: 0, opacity: 0 },
-  show: {
-    pathLength: 1,
-    opacity: 1,
-    transition: { duration: 1.6, ease: "easeInOut", delay: 0.5 },
-  },
-};
-
-// ── Decorative marks ─────────────────────────────────────────────
-// A single reusable flourish, mirrored via CSS transforms instead of
-// hand-drawing a different doodle for every corner.
-
-const Flourish = () => (
-  <svg viewBox="0 0 80 80" fill="none" className="w-full h-full" aria-hidden="true">
-    <motion.path
-      d="M4 4 C4 30, 12 50, 40 54 M4 4 C30 4, 50 12, 54 40"
-      stroke="var(--invitation-gold)"
-      strokeWidth="1.4"
-      strokeLinecap="round"
-      variants={drawPath}
-    />
-    <motion.circle
-      cx="40"
-      cy="54"
-      r="2.2"
-      fill="var(--invitation-gold)"
-      variants={fadeUp}
-    />
-  </svg>
-);
-
 // Slim ornamental divider — a hairline with a small diamond mark at
-// its center, standing in for a section rule.
+// its center. Rendered in white/gold so it reads against a photo.
 const OrnamentDivider = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 160 16" fill="none" className={className} aria-hidden="true">
-    <motion.line
-      x1="0"
-      y1="8"
-      x2="68"
-      y2="8"
-      stroke="var(--invitation-gold)"
-      strokeWidth="1"
-      variants={drawPath}
+    <line x1="0" y1="8" x2="68" y2="8" stroke="var(--invitation-gold-soft)" strokeWidth="1" />
+    <rect
+      x="76" y="4" width="8" height="8" transform="rotate(45 80 8)"
+      stroke="var(--invitation-gold-soft)" strokeWidth="1" fill="none"
     />
-    <motion.rect
-      x="76"
-      y="4"
-      width="8"
-      height="8"
-      transform="rotate(45 80 8)"
-      stroke="var(--invitation-gold)"
-      strokeWidth="1"
-      fill="none"
-      variants={fadeUp}
-    />
-    <motion.line
-      x1="92"
-      y1="8"
-      x2="160"
-      y2="8"
-      stroke="var(--invitation-gold)"
-      strokeWidth="1"
-      variants={drawPath}
-    />
+    <line x1="92" y1="8" x2="160" y2="8" stroke="var(--invitation-gold-soft)" strokeWidth="1" />
   </svg>
 );
-
-// Arch-shaped double hairline that frames the couple photo. Matches
-// the CSS border-radius arch used on the photo mask below, so the
-// gold line reads as a continuous frame rather than a coincidence.
-const ArchFrame = () => (
-  <svg
-    viewBox="0 0 220 280"
-    fill="none"
-    preserveAspectRatio="none"
-    className="w-full h-full"
-    aria-hidden="true"
-  >
-    <motion.path
-      d="M10 270 L10 110 A100 100 0 0 1 210 110 L210 270"
-      stroke="var(--invitation-gold)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      variants={drawPath}
-    />
-    <motion.path
-      d="M22 270 L22 112 A88 88 0 0 1 198 112 L198 270"
-      stroke="var(--invitation-gold-soft)"
-      strokeWidth="1"
-      variants={drawPath}
-      transition={{ ...drawPath.show, delay: 0.75 }}
-    />
-  </svg>
-);
-
-// ── Component ────────────────────────────────────────────────────
 
 export default function HeroSection({ guestName, data }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
 
-  // Subtle cinematic parallax as the hero scrolls out of view — a
-  // library-driven scroll-linked transform instead of a scroll
-  // listener + manual math.
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const photoY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : -40]);
-  const photoScale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
+  // The hero photo frame now fills almost the entire viewport, and
+  // cycles through several photos like an automatic slideshow instead
+  // of showing a single static image. `heroGallery` is the array of
+  // slides; when a client only supplies one photo (or none yet), the
+  // frame simply shows it as a static image with no slideshow chrome.
+  const slides =
+    data.heroGallery && data.heroGallery.length > 0
+      ? data.heroGallery
+      : ["/couple.png"];
+  const isSlideshow = slides.length > 1 && !prefersReducedMotion;
+
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (!isSlideshow) return;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % slides.length);
+    }, SLIDE_DURATION);
+    return () => clearInterval(id);
+  }, [isSlideshow, slides.length]);
 
   const handleScrollDown = () => {
     sectionRef.current?.nextElementSibling?.scrollIntoView({ behavior: "smooth" });
@@ -173,135 +83,167 @@ export default function HeroSection({ guestName, data }: Props) {
   return (
     <section
       ref={sectionRef}
-      className="bg-luxury-vignette relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 pt-16 pb-14"
+      className="relative w-full overflow-hidden bg-[var(--invitation-forest)]"
+      style={{ height: "100dvh" }}
     >
-      {/* Corner flourishes — one asset, mirrored, instead of six
-          unrelated hand-drawn doodles. */}
-      <div className="absolute top-6 left-6 w-14 h-14 opacity-70">
-        <Flourish />
-      </div>
-      <div className="absolute top-6 right-6 w-14 h-14 opacity-70 -scale-x-100">
-        <Flourish />
-      </div>
+      {/* ── Full-bleed photo frame ──
+          Fills essentially the whole screen (a hairline margin so the
+          rounded frame edge is visible, matching the Luxury 2
+          reference) instead of a small photo sitting inside a card. */}
+<div className="absolute inset-0 pb-10 sm:pb-14">
+  <div className="relative h-full w-full overflow-hidden rounded-b-[9999px] shadow-[0_24px_60px_-16px_rgba(20,16,10,0.55)]">
+          {/* ── Slideshow ── */}
+          <AnimatePresence initial={false}>
+            <motion.div key={index} className="absolute inset-0">
+              <motion.div
+                className="absolute inset-0"
+                initial={{ scale: 1 }}
+                animate={{ scale: isSlideshow ? 1.08 : 1 }}
+                transition={{ duration: SLIDE_DURATION / 1000 + 1, ease: "linear" }}
+              >
+                <Image
+                  src={slides[index]}
+                  alt={`${data.bride.name} & ${data.groom.name}`}
+                  fill
+                  sizes="100vw"
+                  priority={index === 0}
+                  className="object-cover"
+                />
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
 
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="relative z-10 flex flex-col items-center text-center max-w-md w-full"
-      >
-        {/* Kepada Yth. */}
-        <motion.p variants={fadeUp} className="text-kicker text-[10px] uppercase mb-2">
-          Kepada Yth.
-        </motion.p>
-        <motion.p
-          variants={fadeUp}
-          className="italic font-medium text-2xl break-words px-4 mb-6"
-          style={{ color: "var(--invitation-forest)", fontFamily: "var(--font-display, serif)" }}
-        >
-          {guestName}
-        </motion.p>
-
-        <motion.div variants={fadeUp} className="w-40 h-4 mb-6">
-          <OrnamentDivider className="w-full h-full" />
-        </motion.div>
-
-        <motion.p variants={fadeUp} className="text-kicker text-[10px] uppercase mb-8">
-          The Wedding Of
-        </motion.p>
-
-        {/* Couple photo — arched frame, drawn once with framer-motion,
-            no manual SVG stroke math. */}
-        <motion.div
-          variants={frameVariants}
-          style={{ y: photoY, scale: photoScale }}
-          className="relative w-[190px] aspect-[220/280] mb-8"
-        >
-          <div
-            className="absolute overflow-hidden shadow-[0_18px_40px_-12px_rgba(43,36,26,0.35)]"
-            style={{ inset: "10px", borderRadius: "100px 100px 0 0" }}
-          >
-            <Image
-              src="/couple.png"
-              alt={`${data.bride.name} & ${data.groom.name}`}
-              fill
-              sizes="190px"
-              className="object-cover object-top"
-              priority
+          {/* Crossfade veil — a second layer that fades the *previous*
+              frame out on top of the new one, giving a soft dissolve
+              between slides rather than a hard cut. */}
+          <AnimatePresence>
+            <motion.div
+              key={`veil-${index}`}
+              className="absolute inset-0"
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.1, ease: "easeInOut" }}
+              style={{ background: "var(--invitation-forest)" }}
             />
-          </div>
-          <div className="absolute inset-0 pointer-events-none">
-            <ArchFrame />
-          </div>
-        </motion.div>
+          </AnimatePresence>
 
-        {/* Bride & groom names — fluid clamp() sizing keeps long
-            names on one line down to 320px screens. */}
-        <motion.h1
-          variants={fadeUp}
-          className="leading-tight break-words px-2"
-          style={{
-            color: "var(--invitation-forest)",
-            fontFamily: "var(--font-display, serif)",
-            fontSize: "clamp(2.5rem, 12vw, 3.75rem)",
-          }}
-        >
-          {data.bride.name}
-        </motion.h1>
+          {/* Gradient veil for legible text at top & bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/35 pointer-events-none" />
 
-        <motion.p
-          variants={fadeUp}
-          className="italic my-1"
-          style={{
-            color: "var(--invitation-gold)",
-            fontFamily: "var(--font-display, serif)",
-            fontSize: "clamp(1.5rem, 6vw, 2rem)",
-          }}
-        >
-          &amp;
-        </motion.p>
+          {/* ── Slide progress dashes (story-style) ── */}
+          {slides.length > 1 && (
+            <div className="absolute top-5 inset-x-5 sm:inset-x-6 flex gap-1.5 z-20">
+              {slides.map((_, i) => (
+                <span
+                  key={i}
+                  className="h-[2px] flex-1 rounded-full overflow-hidden"
+                  style={{ background: "rgba(255,255,255,0.28)" }}
+                >
+                  <motion.span
+                    className="block h-full w-full origin-left"
+                    style={{ background: "#fff" }}
+                    initial={{ scaleX: 0 }}
+                    animate={{
+                      scaleX: i < index ? 1 : i === index ? 1 : 0,
+                    }}
+                    transition={
+                      i === index
+                        ? { duration: SLIDE_DURATION / 1000, ease: "linear" }
+                        : { duration: 0.3 }
+                    }
+                  />
+                </span>
+              ))}
+            </div>
+          )}
 
-        <motion.h1
-          variants={fadeUp}
-          className="leading-tight break-words px-2 mb-8"
-          style={{
-            color: "var(--invitation-forest)",
-            fontFamily: "var(--font-display, serif)",
-            fontSize: "clamp(2.5rem, 12vw, 3.75rem)",
-          }}
-        >
-          {data.groom.name}
-        </motion.h1>
+          {/* ── Guest name pill ── */}
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="absolute top-9 sm:top-10 inset-x-6 z-20 flex justify-center"
+          >
+            <p
+              className="text-[10px] tracking-[0.4em] uppercase text-white/85 text-center break-words"
+              style={{ fontFamily: "var(--font-body, sans-serif)" }}
+            >
+              Kepada Yth. <span className="text-white">{guestName}</span>
+            </p>
+          </motion.div>
 
-        <motion.div variants={fadeUp} className="w-40 h-4 mb-4">
-          <OrnamentDivider className="w-full h-full" />
-        </motion.div>
+          {/* ── Main content, anchored at the bottom of the frame ── */}
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="absolute inset-x-0 bottom-0 z-20 px-8 pb-10 sm:pb-12 pt-20 text-center"
+          >
+            <motion.p
+              variants={fadeUp}
+              className="text-[10px] tracking-[0.45em] uppercase text-white/80 mb-3"
+              style={{ fontFamily: "var(--font-body, sans-serif)" }}
+            >
+              The Wedding Of
+            </motion.p>
 
-        <motion.p variants={fadeUp} className="text-kicker text-xs">
-          {data.akad.date}
-        </motion.p>
-      </motion.div>
+            <motion.h1
+              variants={fadeUp}
+              className="italic leading-[1.05] break-words"
+              style={{
+                color: "#fff",
+                fontFamily: "var(--font-display, serif)",
+                fontSize: "clamp(2.6rem, 13vw, 4rem)",
+                textShadow: "0 4px 24px rgba(0,0,0,0.35)",
+              }}
+            >
+              {data.bride.name}
+              <span style={{ color: "var(--invitation-gold-soft)" }}> &amp; </span>
+              {data.groom.name}
+            </motion.h1>
 
-      {/* Scroll cue */}
-      <motion.button
-        variants={fadeUp}
-        initial="hidden"
-        animate="show"
-        onClick={handleScrollDown}
-        whileHover={{ letterSpacing: "0.32em" }}
-        whileTap={{ scale: 0.97 }}
-        aria-label="Gulir untuk melihat undangan selengkapnya"
-        className="mt-10 inline-flex flex-col items-center gap-2 text-xs uppercase tracking-[0.28em] cursor-pointer"
-        style={{ color: "var(--invitation-forest)", fontFamily: "var(--font-body, sans-serif)" }}
-      >
-        <span>Lihat Undangan</span>
-        <motion.span
-          animate={prefersReducedMotion ? undefined : { y: [0, 6, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <ChevronDown size={16} strokeWidth={1.5} />
-        </motion.span>
-      </motion.button>
+            <motion.div variants={fadeUp} className="w-40 h-4 mx-auto my-5">
+              <OrnamentDivider className="w-full h-full" />
+            </motion.div>
+
+            <motion.p
+              variants={fadeUp}
+              className="text-xs tracking-[0.3em] uppercase text-white/90 mb-5"
+              style={{ fontFamily: "var(--font-body, sans-serif)" }}
+            >
+              {data.akad.date}
+            </motion.p>
+
+            <motion.p
+              variants={fadeUp}
+              className="text-sm text-white/75 max-w-[280px] mx-auto leading-relaxed"
+              style={{ fontFamily: "var(--font-body, sans-serif)" }}
+            >
+              Kami berharap Anda menjadi bagian dari hari istimewa kami
+            </motion.p>
+          </motion.div>
+
+          {/* ── Scroll cue, tucked into the corner of the frame ── */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            onClick={handleScrollDown}
+            whileTap={{ scale: 0.92 }}
+            aria-label="Gulir untuk melihat undangan selengkapnya"
+            className="absolute bottom-5 right-5 sm:bottom-6 sm:right-6 z-20 w-10 h-10 rounded-full border border-white/40 bg-white/10 backdrop-blur-sm flex items-center justify-center cursor-pointer"
+          >
+            <motion.span
+              animate={prefersReducedMotion ? undefined : { y: [0, 4, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              className="flex"
+            >
+              <ChevronDown size={16} strokeWidth={1.5} color="#fff" />
+            </motion.span>
+          </motion.button>
+        </div>
+      </div>
     </section>
   );
 }
