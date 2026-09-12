@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { weddingData } from "../config/weddingData";
 import HeroSection from "./Components/HeroSection";
 import CoupleSection from "./Components/CoupleSection";
@@ -13,6 +13,7 @@ import EnvelopeOpener from "./Components/EnvelopeOpener";
 import QuotesSection from "./Components/QuotesSection";
 import WishesSection from "./Components/WishesSection";
 import DressCodeSection from "./Components/DressCodeSection";
+import MusicPlayer, { MusicPlayerHandle } from "./Components/MusicPlayer";
 
 interface InvitationContentProps {
   carouselImages: string[];
@@ -29,10 +30,19 @@ export default function InvitationContent({
   const guestName = guestNameProp ?? searchParams.get("to") ?? "Tamu Undangan";
   const data = dataProp ?? weddingData;
   const [opened, setOpened] = useState(false);
+  const musicRef = useRef<MusicPlayerHandle>(null);
+
+  const handleEnvelopeOpen = () => {
+    setOpened(true);
+    // Klik segel = user gesture, jadi browser mengizinkan audio.play() di sini.
+    musicRef.current?.play();
+  };
 
   return (
     <main className="min-h-screen bg-[#f4f6eb] overflow-x-hidden">
-      {!opened && <EnvelopeOpener guestName={guestName} onOpen={() => setOpened(true)} />}
+      {!opened && <EnvelopeOpener guestName={guestName} onOpen={handleEnvelopeOpen} />}
+
+      <MusicPlayer ref={musicRef} src="/music/wedding-song.mp3" />
 
       <HeroSection guestName={guestName} data={data} />
       <QuotesSection carouselImages={carouselImages} />
