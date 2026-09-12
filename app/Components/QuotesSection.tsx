@@ -318,7 +318,7 @@ export default function QuotesSection({ carouselImages = [] }: Props) {
           {showPhotos && (
             <div key={`photos-${phase === "idle" ? "reset" : "show"}`} className="flex items-center justify-center gap-6 mb-10 relative z-20">
               <div className="photo-left">
-                <CoupleAvatar src="/karosel/nana.jpeg" alt="Wanita" />
+                <CoupleAvatar src="/ABY01518.jpg.jpeg" alt="Wanita" />
               </div>
 
               <div
@@ -332,7 +332,7 @@ export default function QuotesSection({ carouselImages = [] }: Props) {
               </div>
 
               <div className="photo-right">
-                <CoupleAvatar src="/karosel/yono.jpeg" alt="Pria" />
+                <CoupleAvatar src="/ABY01510.jpg.jpeg" alt="Pria" />
               </div>
             </div>
           )}

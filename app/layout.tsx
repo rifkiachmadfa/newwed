@@ -34,8 +34,8 @@ const siteUrl = "https://weddinginvnana.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Undangan Pernikahan Khaharani & Yono",
-    template: "%s | Undangan Khaharani & Yono",
+    default: "Undangan Pernikahan",
+    template: "%s | Undangan",
   },
   description:
     "Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk menyaksikan momen sakral pernikahan Khaharani & Yono.",
@@ -44,10 +44,10 @@ export const metadata: Metadata = {
   category: "wedding invitation",
   robots: { index: false, follow: false },
   openGraph: {
-    title: "Undangan Pernikahan Khaharani & Yono",
+    title: "Undangan Pernikahan",
     description: "Minggu, 16 Agustus 2026 — Bandung, Jawa Barat",
     url: siteUrl,
-    siteName: "Undangan Khaharani & Yono",
+    siteName: "Undangan Pernikahan",
     type: "website",
     locale: "id_ID",
     images: [

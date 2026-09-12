@@ -74,7 +74,7 @@ function EventCard({
       {/* ── Frame foto di bagian atas ── */}
       <div className="event-photo">
         <Image
-          src={event.image || "/couple.png"}
+          src={event.image || "/1.jpeg"}
           alt={label}
           fill
           className="object-cover"
