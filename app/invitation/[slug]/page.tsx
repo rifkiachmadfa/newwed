@@ -2,8 +2,8 @@ import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 import InvitationClient from "@/app/InvitationPageClient";
 import { weddingData } from "@/config/weddingData";
-
 import type { Metadata } from "next";
+import { getKaroselImages } from "@/lib/getKaroselImages";
 
 type Props = {
   params: { slug: string };
@@ -34,9 +34,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function GuestInvitationPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params; // ← await params
+  const { slug } = await params;
   const guest = await prisma.guest.findUnique({ where: { slug } });
   if (!guest) notFound();
 
-  return <InvitationClient guestName={guest.name} data={weddingData} />;
+  const carouselImages = getKaroselImages();
+
+  return (
+    <InvitationClient
+      guestName={guest.name}
+      data={weddingData}
+      carouselImages={carouselImages}
+    />
+  );
 }
