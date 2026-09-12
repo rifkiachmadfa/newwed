@@ -38,16 +38,11 @@ const fadeUp: Variants = {
   },
 };
 
-// Slim ornamental divider — a hairline with a small diamond mark at
-// its center. Rendered in white/gold so it reads against a photo.
+// Slim divider — a single hairline, matching the plain rule used under
+// the couple's names in the reference design (no ornamental mark).
 const OrnamentDivider = ({ className = "" }: { className?: string }) => (
-  <svg viewBox="0 0 160 16" fill="none" className={className} aria-hidden="true">
-    <line x1="0" y1="8" x2="68" y2="8" stroke="var(--invitation-gold-soft)" strokeWidth="1" />
-    <rect
-      x="76" y="4" width="8" height="8" transform="rotate(45 80 8)"
-      stroke="var(--invitation-gold-soft)" strokeWidth="1" fill="none"
-    />
-    <line x1="92" y1="8" x2="160" y2="8" stroke="var(--invitation-gold-soft)" strokeWidth="1" />
+  <svg viewBox="0 0 160 4" fill="none" className={className} aria-hidden="true">
+    <line x1="0" y1="2" x2="160" y2="2" stroke="rgba(255,255,255,0.75)" strokeWidth="1" />
   </svg>
 );
 
@@ -88,10 +83,10 @@ export default function HeroSection({ guestName, data }: Props) {
     >
       {/* ── Full-bleed photo frame ──
           Fills essentially the whole screen (a hairline margin so the
-          rounded frame edge is visible, matching the Luxury 2
-          reference) instead of a small photo sitting inside a card. */}
-<div className="absolute inset-0 pb-10 sm:pb-14">
-  <div className="relative h-full w-full overflow-hidden rounded-b-[9999px] shadow-[0_24px_60px_-16px_rgba(20,16,10,0.55)]">
+          rounded frame edge is visible, matching the reference) instead
+          of a small photo sitting inside a card. */}
+      <div className="absolute inset-0 pb-10 sm:pb-14">
+        <div className="relative h-full w-full overflow-hidden rounded-b-[9999px] shadow-[0_24px_60px_-16px_rgba(20,16,10,0.55)]">
           {/* ── Slideshow ── */}
           <AnimatePresence initial={false}>
             <motion.div key={index} className="absolute inset-0">
@@ -128,8 +123,10 @@ export default function HeroSection({ guestName, data }: Props) {
             />
           </AnimatePresence>
 
-          {/* Gradient veil for legible text at top & bottom */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/35 pointer-events-none" />
+          {/* Gradient veil for legible text at top & bottom — slightly
+              lighter through the middle so more of the photo reads
+              through, heavier at the very bottom for text contrast. */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-black/25 pointer-events-none" />
 
           {/* ── Slide progress dashes (story-style) ── */}
           {slides.length > 1 && (
@@ -178,7 +175,7 @@ export default function HeroSection({ guestName, data }: Props) {
             variants={container}
             initial="hidden"
             animate="show"
-            className="absolute inset-x-0 bottom-0 z-20 px-8 pb-10 sm:pb-12 pt-20 text-center"
+            className="absolute inset-x-0 bottom-0 z-20 px-8 pb-12 sm:pb-14 pt-24 text-center"
           >
             <motion.p
               variants={fadeUp}
@@ -203,13 +200,13 @@ export default function HeroSection({ guestName, data }: Props) {
               {data.groom.name}
             </motion.h1>
 
-            <motion.div variants={fadeUp} className="w-40 h-4 mx-auto my-5">
+            <motion.div variants={fadeUp} className="w-32 h-[2px] mx-auto my-5">
               <OrnamentDivider className="w-full h-full" />
             </motion.div>
 
             <motion.p
               variants={fadeUp}
-              className="text-xs tracking-[0.3em] uppercase text-white/90 mb-5"
+              className="text-sm sm:text-base font-semibold tracking-wide text-white mb-4"
               style={{ fontFamily: "var(--font-body, sans-serif)" }}
             >
               {data.akad.date}
@@ -217,7 +214,7 @@ export default function HeroSection({ guestName, data }: Props) {
 
             <motion.p
               variants={fadeUp}
-              className="text-sm text-white/75 max-w-[280px] mx-auto leading-relaxed"
+              className="text-sm sm:text-base font-semibold tracking-wide text-white/90 max-w-[280px] mx-auto leading-relaxed"
               style={{ fontFamily: "var(--font-body, sans-serif)" }}
             >
               Kami berharap Anda menjadi bagian dari hari istimewa kami

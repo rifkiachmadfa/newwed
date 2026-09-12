@@ -45,13 +45,6 @@ Find important files:
 find . -maxdepth 3 -type f | sort
 
 
-Read:
-
-CLAUDE.md
-AGENTS.md
-README.md
-
-
 Also inspect any relevant project-specific documentation.
 
 3. Never Guess the Architecture
