@@ -59,17 +59,22 @@ export default function HeroSection({ guestName, data }: Props) {
     data.heroGallery && data.heroGallery.length > 0
       ? data.heroGallery
       : ["/couple.png"];
-  const isSlideshow = slides.length > 1 && !prefersReducedMotion;
+
+  // Slideshow rotation now runs regardless of the user's reduced-motion
+  // preference — only the zoom/scale animation respects that setting.
+  // This way the photos still change even on devices/browsers where
+  // "Reduce Motion" is turned on.
+  const hasMultipleSlides = slides.length > 1;
 
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (!isSlideshow) return;
+    if (!hasMultipleSlides) return;
     const id = setInterval(() => {
       setIndex((i) => (i + 1) % slides.length);
     }, SLIDE_DURATION);
     return () => clearInterval(id);
-  }, [isSlideshow, slides.length]);
+  }, [hasMultipleSlides, slides.length]);
 
   const handleScrollDown = () => {
     sectionRef.current?.nextElementSibling?.scrollIntoView({ behavior: "smooth" });
@@ -93,7 +98,7 @@ export default function HeroSection({ guestName, data }: Props) {
               <motion.div
                 className="absolute inset-0"
                 initial={{ scale: 1 }}
-                animate={{ scale: isSlideshow ? 1.08 : 1 }}
+                animate={{ scale: hasMultipleSlides && !prefersReducedMotion ? 1.08 : 1 }}
                 transition={{ duration: SLIDE_DURATION / 1000 + 1, ease: "linear" }}
               >
                 <Image

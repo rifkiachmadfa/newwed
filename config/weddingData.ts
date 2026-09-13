@@ -61,8 +61,8 @@ resepsi: {
       contactPerson: "Ibu Siti Rahayu",
       contactPhone: "0812-3456-7890",
       bankAccounts: [
-        { bank: "BLU BCA", accountNumber: "3461256293", accountName: "Rakhasela Syam Kautsar" },
-        { bank: "BCA", accountNumber: "005021408774", accountName: "Racheel Syifa Muthmainnah" },
+        { bank: "BCA", accountNumber: "3461256293", accountName: "Rakhasela Syam Kautsar" },
+        { bank: "BLU BCA", accountNumber: "005021408774", accountName: "Racheel Syifa Muthmainnah" },
       ],
       wishlist: [
         { name: "Setrika", url: "https://id.shp.ee/2iTBk2Y6" },
