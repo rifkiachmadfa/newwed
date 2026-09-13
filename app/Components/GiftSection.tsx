@@ -349,14 +349,8 @@ export default function GiftSection({ data }: Props) {
                 textAlign: "center",
               }}
             >
-              Beberapa barang yang masih kami butuhkan untuk rumah baru kami:
+           
             </motion.p>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {wishlist.map((item) => (
-                <WishlistCard key={item.name} item={item} />
-              ))}
-            </div>
           </>
         )}
       </motion.div>

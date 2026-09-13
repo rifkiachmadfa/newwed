@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { weddingData } from "../config/weddingData";
 import HeroSection from "./Components/HeroSection";
 import CoupleSection from "./Components/CoupleSection";
+import OurStorySection from "./Components/OurStorySection";
 import EventSection from "./Components/EventSection";
 import GiftSection from "./Components/GiftSection";
 import ClosingSection from "./Components/ClosingSection";
@@ -34,7 +35,6 @@ export default function InvitationContent({
 
   const handleEnvelopeOpen = () => {
     setOpened(true);
-    // Klik segel = user gesture, jadi browser mengizinkan audio.play() di sini.
     musicRef.current?.play();
   };
 
@@ -47,6 +47,7 @@ export default function InvitationContent({
       <HeroSection guestName={guestName} data={data} />
       <QuotesSection carouselImages={carouselImages} />
       <CoupleSection data={data} />
+      <OurStorySection data={data} />
       <CountdownSection targetDate={data.weddingDate} />
       <EventSection data={data} />
       <DressCodeSection data={data} />
