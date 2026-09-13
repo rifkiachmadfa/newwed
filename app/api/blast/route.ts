@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { sendMessage } from "@/lib/fonnte/client";
 
 export async function POST(req: NextRequest) {
   try {
@@ -35,32 +36,25 @@ export async function POST(req: NextRequest) {
       .replace(/\D/g, "")
       .replace(/^0/, "62");
 
-    // Kirim pesan teks
-    const res = await fetch("https://api.fonnte.com/send", {
-      method: "POST",
-      headers: {
-        "Authorization": process.env.FONNTE_TOKEN!,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        target: phone,
-        message,
-        url: "https://res.cloudinary.com/dzjydhoc7/image/upload/v1784378310/couple_rwujja.png",
-        countryCode: "62",
-      }),
-    });
+    const result = await sendMessage(
+      phone,
+      message,
+      "https://res.cloudinary.com/dzjydhoc7/image/upload/v1784378310/couple_rwujja.png"
+    );
 
-    const data = await res.json();
-    console.log("Fonnte response:", JSON.stringify(data));
-
-    if (!res.ok || !data.status) {
-      console.error("Fonnte error:", data);
-      return NextResponse.json({ error: data.reason ?? "Gagal kirim pesan" }, { status: 500 });
+    if (!result.success) {
+      console.error("Fonnte error:", result.error);
+      return NextResponse.json(
+        { error: result.error ?? "Gagal mengirim undangan." },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ success: true });
   } catch (err) {
+    const message =
+      err instanceof Error ? err.message : "Gagal mengirim undangan.";
     console.error(err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

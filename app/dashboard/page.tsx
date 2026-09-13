@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { UserPlus, Send, Trash2, Users, Heart, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
+import { WhatsAppConnectionCard } from "./components/whatsapp-connection-card";
 
 type Guest = {
   id: number;
@@ -55,6 +56,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false);
   const [blasting, setBlasting] = useState<number | null>(null);
   const [form, setForm] = useState({ name: "", phone: "" });
+  const [whatsappConnected, setWhatsappConnected] = useState(false);
 
   const fetchGuests = async () => {
     const res = await fetch("/api/guests");
@@ -100,6 +102,10 @@ export default function DashboardPage() {
   };
 
   const handleBlast = async (guest: Guest) => {
+    if (!whatsappConnected) {
+      toast.error("WhatsApp belum terhubung. Silakan hubungkan WhatsApp terlebih dahulu.");
+      return;
+    }
     setBlasting(guest.id);
     try {
       const res = await fetch("/api/blast", {
@@ -124,6 +130,10 @@ export default function DashboardPage() {
   };
 
   const handleBlastAll = async () => {
+    if (!whatsappConnected) {
+      toast.error("WhatsApp belum terhubung. Silakan hubungkan WhatsApp terlebih dahulu.");
+      return;
+    }
     if (!confirm(`Kirim undangan ke semua ${guests.length} tamu?`)) return;
     for (const guest of guests) {
       await handleBlast(guest);
@@ -154,6 +164,9 @@ export default function DashboardPage() {
 
       {/* Content */}
       <div className="max-w-5xl mx-auto px-6 py-8 space-y-6">
+        {/* WhatsApp Connection */}
+        <WhatsAppConnectionCard onStatusChange={setWhatsappConnected} />
+
         {/* Action Bar */}
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-medium text-[#6b5c53] uppercase tracking-widest">
@@ -164,7 +177,8 @@ export default function DashboardPage() {
               variant="outline"
               size="sm"
               onClick={handleBlastAll}
-              disabled={guests.length === 0}
+              disabled={guests.length === 0 || !whatsappConnected}
+              title={!whatsappConnected ? "Hubungkan WhatsApp terlebih dahulu" : undefined}
               className="border-[#d4c9bf] text-[#6b5c53] hover:bg-[#f0ebe5]"
             >
               <Send className="w-3.5 h-3.5 mr-1.5" />
@@ -222,7 +236,8 @@ export default function DashboardPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleBlast(guest)}
-                          disabled={blasting === guest.id}
+                          disabled={blasting === guest.id || !whatsappConnected}
+                          title={!whatsappConnected ? "Hubungkan WhatsApp terlebih dahulu" : undefined}
                           className="h-8 px-2.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                         >
                           <Send className="w-3.5 h-3.5 mr-1" />
