@@ -30,18 +30,21 @@ export async function POST(req: NextRequest) {
 
     const invitationUrl = `${baseUrl}/invitation/${guest.slug}`;
 
-    const { groom, bride } = weddingData;
+    const { groom, bride, akad } = weddingData;
     const coupleName = `${groom.name} & ${bride.name}`;
 
     const message =
       `*Assalamu'alaikum Wr. Wb.*\n\n` +
       `Kepada Yth.\n*${guest.name}*\n\n` +
-      `Dengan memohon rahmat dan ridho Allah Subhanahuwata'ala, kami bermaksud mengundang *${guest.name}* untuk menghadiri acara pernikahan kami.\n\n` +
-      `*Berikut link undangan digital untuk ${guest.name}:*\n` +
-      `${invitationUrl}\n` +
+      `Dengan memohon rahmat dan ridho Allah Subhanahuwata'ala, kami bermaksud mengundang *${guest.name}* untuk menghadiri acara pernikahan kami yang akan dilaksanakan pada:\n\n` +
+      `🗓️ Hari/Tanggal: ${akad.day}, ${akad.date}\n` +
+      `📍 Lokasi: ${akad.venue} (Maps terlampir)\n\n` +
+      `Link undangan digital untuk ${guest.name}:\n` +
+      `${invitationUrl}\n\n` +
       `Merupakan suatu kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\n\n` +
       `*Wassalamu'alaikum Wr. Wb.*\n` +
-      `${coupleName} 💍`;
+      `${coupleName} 💍\n\n` +
+      `‼️*Catatan*: Bagi tamu yang akan menghadiri acara, diharapkan melakukan konfirmasi melalui undangan digital`;
 
     const phone = guest.phone
       .replace(/\D/g, "")
