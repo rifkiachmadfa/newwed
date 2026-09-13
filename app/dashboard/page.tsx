@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { WhatsAppConnectionCard } from "./components/whatsapp-connection-card";
+import { weddingData } from "@/config/weddingData";
 
 type Guest = {
   id: number;
@@ -29,6 +30,8 @@ type Guest = {
 };
 
 const PAGE_SIZE = 20;
+
+const COUPLE_NAME = `${weddingData.groom.name} & ${weddingData.bride.name}`;
 
 function CopyLinkButton({ slug }: { slug: string }) {
   const [copied, setCopied] = useState(false);
@@ -244,7 +247,7 @@ export default function DashboardPage() {
               <h1 className="text-lg font-semibold text-[#3a2e28] tracking-tight">
                 Dashboard Undangan
               </h1>
-              <p className="text-xs text-[#9e8e82]">Khaharani & Yono</p>
+              <p className="text-xs text-[#9e8e82]">{COUPLE_NAME}</p>
             </div>
           </div>
           <Badge variant="secondary" className="bg-rose-50 text-rose-600 border-rose-100">
