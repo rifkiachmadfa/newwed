@@ -6,34 +6,61 @@ import type { Metadata } from "next";
 import { getKaroselImages } from "@/lib/getKaroselImages";
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL ?? "https://undangandigital-eight.vercel.app";
+
+const OG_IMAGE_URL =
+  "https://res.cloudinary.com/dzjydhoc7/image/upload/v1784378310/couple_rwujja.png";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  // ambil data guest berdasarkan slug jika perlu personalisasi
+  const { slug } = await params;
+
+  const guest = await prisma.guest.findUnique({ where: { slug } });
+
+  const { groom, bride, akad } = weddingData;
+
+  const coupleTitle = `${groom.name} & ${bride.name}`;
+
+  const title = `Undangan Pernikahan ${coupleTitle}`;
+
+  const description = guest
+    ? `Kepada Yth. ${guest.name}, dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk hadir di pernikahan ${coupleTitle} pada ${akad.day}, ${akad.date} di ${akad.venue}.`
+    : `Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk hadir di pernikahan ${coupleTitle} pada ${akad.day}, ${akad.date} di ${akad.venue}.`;
+
+  const url = `${SITE_URL}/invitation/${slug}`;
+
   return {
-    title: "Undangan Pernikahan Khaharani & Yono",
-    description: "Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk hadir di hari bahagia kami.",
+    title,
+    description,
     openGraph: {
-      title: "Undangan Pernikahan Khaharani & Yono",
-      description: "Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk hadir di hari bahagia kami.",
-      url: `https://weddinginvnana.vercel.app/invitation/${params.slug}`,
-      siteName: "Undangan Khaharani & Yono",
+      title,
+      description,
+      url,
+      siteName: `Undangan ${coupleTitle}`,
       images: [
         {
-          url: "https://res.cloudinary.com/dzjydhoc7/image/upload/v1784378310/couple_rwujja.png", // ← foto/banner pernikahan
+          url: OG_IMAGE_URL,
           width: 1080,
           height: 1080,
-          alt: "Undangan Pernikahan Khaharani & Yono",
+          alt: title,
         },
       ],
       type: "website",
       locale: "id_ID",
     },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [OG_IMAGE_URL],
+    },
   };
 }
 
-export default async function GuestInvitationPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function GuestInvitationPage({ params }: Props) {
   const { slug } = await params;
   const guest = await prisma.guest.findUnique({ where: { slug } });
   if (!guest) notFound();
