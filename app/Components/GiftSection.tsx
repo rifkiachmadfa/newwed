@@ -327,32 +327,7 @@ export default function GiftSection({ data }: Props) {
         </div>
 
         {/* ── Wishlist / daftar kado barang ── */}
-        {wishlist.length > 0 && (
-          <>
-            <motion.div variants={fadeUp} style={{ display: "flex", alignItems: "center", gap: 12, margin: "36px 0 24px" }}>
-              <div style={{ flex: 1, height: 1, background: "rgba(0,0,0,0.08)" }} />
-              <p className="text-kicker" style={{ fontSize: 9, flexShrink: 0 }}>
-                atau kirim barang
-              </p>
-              <div style={{ flex: 1, height: 1, background: "rgba(0,0,0,0.08)" }} />
-            </motion.div>
-
-            <motion.p
-              variants={fadeUp}
-              style={{
-                color: "var(--invitation-muted, #98988f)",
-                fontFamily: "var(--font-body, sans-serif)",
-                fontSize: "0.8rem",
-                lineHeight: 1.7,
-                maxWidth: 280,
-                margin: "0 auto 20px",
-                textAlign: "center",
-              }}
-            >
-           
-            </motion.p>
-          </>
-        )}
+     
       </motion.div>
 
       <motion.div

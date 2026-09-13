@@ -97,7 +97,7 @@ resepsi: {
       description: "Kami mulai serius memikirkan pernikahan.",
     },
     {
-      year: "2024",
+      year: "2025",
       title: "Lamaran",
       description: "Dua tahun kemudian, langkah itu semakin nyata melalui lamaran.",
     },
