@@ -113,6 +113,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    await prisma.guest.update({
+      where: { id: guest.id },
+      data: { blastedAt: new Date() },
+    });
+
     return NextResponse.json({ success: true });
   } catch (err) {
     const message =

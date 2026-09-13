@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
@@ -12,7 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { UserPlus, Send, Trash2, Users, Heart, Copy, Check } from "lucide-react";
+import {
+  UserPlus, Send, Trash2, Users, Heart, Copy, Check,
+  ChevronLeft, ChevronRight, CheckCircle2,
+} from "lucide-react";
 import { toast } from "sonner";
 import { WhatsAppConnectionCard } from "./components/whatsapp-connection-card";
 
@@ -22,7 +25,10 @@ type Guest = {
   phone: string;
   slug: string;
   createdAt: string;
+  blastedAt: string | null;
 };
+
+const PAGE_SIZE = 20;
 
 function CopyLinkButton({ slug }: { slug: string }) {
   const [copied, setCopied] = useState(false);
@@ -50,13 +56,54 @@ function CopyLinkButton({ slug }: { slug: string }) {
   );
 }
 
+function Pagination({
+  page,
+  totalPages,
+  onChange,
+}: {
+  page: number;
+  totalPages: number;
+  onChange: (page: number) => void;
+}) {
+  if (totalPages <= 1) return null;
+  return (
+    <div className="flex items-center justify-end gap-2 px-4 py-3 border-t border-[#f0ebe5] bg-[#faf8f5]">
+      <span className="text-xs text-[#9e8e82] mr-2">
+        Halaman {page} dari {totalPages}
+      </span>
+      <Button
+        variant="outline"
+        size="sm"
+        className="h-7 w-7 p-0 border-[#d4c9bf]"
+        disabled={page <= 1}
+        onClick={() => onChange(page - 1)}
+      >
+        <ChevronLeft className="w-3.5 h-3.5" />
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="h-7 w-7 p-0 border-[#d4c9bf]"
+        disabled={page >= totalPages}
+        onClick={() => onChange(page + 1)}
+      >
+        <ChevronRight className="w-3.5 h-3.5" />
+      </Button>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [blasting, setBlasting] = useState<number | null>(null);
+  const [blastingAll, setBlastingAll] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "" });
   const [whatsappConnected, setWhatsappConnected] = useState(false);
+
+  const [pendingPage, setPendingPage] = useState(1);
+  const [sentPage, setSentPage] = useState(1);
 
   const fetchGuests = async () => {
     const res = await fetch("/api/guests");
@@ -71,6 +118,35 @@ export default function DashboardPage() {
       .then((data) => { if (!ignore) setGuests(data); });
     return () => { ignore = true; };
   }, []);
+
+  const pendingGuests = useMemo(
+    () => guests.filter((g) => !g.blastedAt),
+    [guests]
+  );
+  const sentGuests = useMemo(
+    () => guests.filter((g) => !!g.blastedAt),
+    [guests]
+  );
+
+  const pendingTotalPages = Math.max(1, Math.ceil(pendingGuests.length / PAGE_SIZE));
+  const sentTotalPages = Math.max(1, Math.ceil(sentGuests.length / PAGE_SIZE));
+
+  // Jaga page tidak "nyangkut" di luar range kalau data berubah (misal setelah delete)
+  useEffect(() => {
+    if (pendingPage > pendingTotalPages) setPendingPage(pendingTotalPages);
+  }, [pendingTotalPages, pendingPage]);
+  useEffect(() => {
+    if (sentPage > sentTotalPages) setSentPage(sentTotalPages);
+  }, [sentTotalPages, sentPage]);
+
+  const pendingPageItems = pendingGuests.slice(
+    (pendingPage - 1) * PAGE_SIZE,
+    pendingPage * PAGE_SIZE
+  );
+  const sentPageItems = sentGuests.slice(
+    (sentPage - 1) * PAGE_SIZE,
+    sentPage * PAGE_SIZE
+  );
 
   const handleSave = async () => {
     if (!form.name.trim() || !form.phone.trim()) {
@@ -118,6 +194,13 @@ export default function DashboardPage() {
 
       if (res.ok) {
         toast.success(`Undangan terkirim ke ${guest.name}!`);
+        // Update status lokal supaya tamu langsung pindah ke tabel "Sudah Dikirim"
+        // tanpa perlu fetch ulang seluruh data.
+        setGuests((prev) =>
+          prev.map((g) =>
+            g.id === guest.id ? { ...g, blastedAt: new Date().toISOString() } : g
+          )
+        );
       } else {
         toast.error(data.error ?? "Gagal mengirim undangan.");
       }
@@ -134,11 +217,20 @@ export default function DashboardPage() {
       toast.error("WhatsApp belum terhubung. Silakan hubungkan WhatsApp terlebih dahulu.");
       return;
     }
-    if (!confirm(`Kirim undangan ke semua ${guests.length} tamu?`)) return;
-    for (const guest of guests) {
+    // Ambil snapshot tamu yang BELUM pernah di-blast saja.
+    const targets = guests.filter((g) => !g.blastedAt);
+    if (targets.length === 0) {
+      toast.info("Semua tamu sudah menerima undangan. Gunakan tombol Kirim manual untuk mengirim ulang.");
+      return;
+    }
+    if (!confirm(`Kirim undangan ke ${targets.length} tamu yang belum menerima?`)) return;
+
+    setBlastingAll(true);
+    for (const guest of targets) {
       await handleBlast(guest);
       await new Promise((r) => setTimeout(r, 3000 + Math.random() * 2000));
     }
+    setBlastingAll(false);
   };
 
   return (
@@ -163,7 +255,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-5xl mx-auto px-6 py-8 space-y-6">
+      <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
         {/* WhatsApp Connection */}
         <WhatsAppConnectionCard onStatusChange={setWhatsappConnected} />
 
@@ -177,12 +269,12 @@ export default function DashboardPage() {
               variant="outline"
               size="sm"
               onClick={handleBlastAll}
-              disabled={guests.length === 0 || !whatsappConnected}
+              disabled={pendingGuests.length === 0 || !whatsappConnected || blastingAll}
               title={!whatsappConnected ? "Hubungkan WhatsApp terlebih dahulu" : undefined}
               className="border-[#d4c9bf] text-[#6b5c53] hover:bg-[#f0ebe5]"
             >
               <Send className="w-3.5 h-3.5 mr-1.5" />
-              Blast Semua
+              {blastingAll ? "Mengirim..." : `Blast Semua (${pendingGuests.length})`}
             </Button>
             <Button
               size="sm"
@@ -195,69 +287,162 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <Separator className="bg-[#e8e0d5]" />
-
-        {/* Table */}
-        <div className="rounded-xl border border-[#e8e0d5] bg-white overflow-hidden shadow-sm">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-[#faf8f5] border-[#e8e0d5]">
-                <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider w-8">#</TableHead>
-                <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider">Nama</TableHead>
-                <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider">Nomor HP</TableHead>
-                <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider">Link Undangan</TableHead>
-                <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider text-right">Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {guests.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center py-12 text-[#b0a098]">
-                    Belum ada tamu ditambahkan.
-                  </TableCell>
+        {/* Tabel: Belum Dikirim */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Send className="w-3.5 h-3.5 text-[#9e8e82]" />
+            <h3 className="text-xs font-medium text-[#6b5c53] uppercase tracking-widest">
+              Belum Dikirim ({pendingGuests.length})
+            </h3>
+          </div>
+          <div className="rounded-xl border border-[#e8e0d5] bg-white overflow-hidden shadow-sm">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-[#faf8f5] border-[#e8e0d5]">
+                  <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider w-8">#</TableHead>
+                  <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider">Nama</TableHead>
+                  <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider">Nomor HP</TableHead>
+                  <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider">Link Undangan</TableHead>
+                  <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider text-right">Aksi</TableHead>
                 </TableRow>
-              ) : (
-                guests.map((guest, idx) => (
-                  <TableRow key={guest.id} className="border-[#f0ebe5] hover:bg-[#fdf9f6]">
-                    <TableCell className="text-[#b0a098] text-sm">{idx + 1}</TableCell>
-                    <TableCell className="font-medium text-[#3a2e28]">{guest.name}</TableCell>
-                    <TableCell className="text-[#6b5c53]">{guest.phone}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs text-[#9e8e82] font-mono bg-[#f5f0eb] px-2 py-0.5 rounded">
-                          /invitation/{guest.slug}
-                        </span>
-                        <CopyLinkButton slug={guest.slug} />
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex gap-1.5 justify-end">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleBlast(guest)}
-                          disabled={blasting === guest.id || !whatsappConnected}
-                          title={!whatsappConnected ? "Hubungkan WhatsApp terlebih dahulu" : undefined}
-                          className="h-8 px-2.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
-                        >
-                          <Send className="w-3.5 h-3.5 mr-1" />
-                          {blasting === guest.id ? "..." : "Kirim"}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDelete(guest.id)}
-                          className="h-8 px-2 text-red-400 hover:text-red-600 hover:bg-red-50"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </Button>
-                      </div>
+              </TableHeader>
+              <TableBody>
+                {pendingGuests.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-12 text-[#b0a098]">
+                      Semua tamu sudah menerima undangan 🎉
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  pendingPageItems.map((guest, idx) => (
+                    <TableRow key={guest.id} className="border-[#f0ebe5] hover:bg-[#fdf9f6]">
+                      <TableCell className="text-[#b0a098] text-sm">
+                        {(pendingPage - 1) * PAGE_SIZE + idx + 1}
+                      </TableCell>
+                      <TableCell className="font-medium text-[#3a2e28]">{guest.name}</TableCell>
+                      <TableCell className="text-[#6b5c53]">{guest.phone}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs text-[#9e8e82] font-mono bg-[#f5f0eb] px-2 py-0.5 rounded">
+                            /invitation/{guest.slug}
+                          </span>
+                          <CopyLinkButton slug={guest.slug} />
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex gap-1.5 justify-end">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleBlast(guest)}
+                            disabled={blasting === guest.id || !whatsappConnected}
+                            title={!whatsappConnected ? "Hubungkan WhatsApp terlebih dahulu" : undefined}
+                            className="h-8 px-2.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+                          >
+                            <Send className="w-3.5 h-3.5 mr-1" />
+                            {blasting === guest.id ? "..." : "Kirim"}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDelete(guest.id)}
+                            className="h-8 px-2 text-red-400 hover:text-red-600 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+            <Pagination
+              page={pendingPage}
+              totalPages={pendingTotalPages}
+              onChange={setPendingPage}
+            />
+          </div>
+        </div>
+
+        <Separator className="bg-[#e8e0d5]" />
+
+        {/* Tabel: Sudah Dikirim */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+            <h3 className="text-xs font-medium text-[#6b5c53] uppercase tracking-widest">
+              Sudah Dikirim ({sentGuests.length})
+            </h3>
+          </div>
+          <div className="rounded-xl border border-[#e8e0d5] bg-white overflow-hidden shadow-sm">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-[#faf8f5] border-[#e8e0d5]">
+                  <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider w-8">#</TableHead>
+                  <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider">Nama</TableHead>
+                  <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider">Nomor HP</TableHead>
+                  <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider">Terkirim Pada</TableHead>
+                  <TableHead className="text-xs font-medium text-[#9e8e82] uppercase tracking-wider text-right">Aksi</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sentGuests.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-12 text-[#b0a098]">
+                      Belum ada undangan yang terkirim.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  sentPageItems.map((guest, idx) => (
+                    <TableRow key={guest.id} className="border-[#f0ebe5] hover:bg-[#fdf9f6]">
+                      <TableCell className="text-[#b0a098] text-sm">
+                        {(sentPage - 1) * PAGE_SIZE + idx + 1}
+                      </TableCell>
+                      <TableCell className="font-medium text-[#3a2e28]">{guest.name}</TableCell>
+                      <TableCell className="text-[#6b5c53]">{guest.phone}</TableCell>
+                      <TableCell className="text-[#9e8e82] text-sm">
+                        {guest.blastedAt
+                          ? new Date(guest.blastedAt).toLocaleString("id-ID", {
+                              dateStyle: "medium",
+                              timeStyle: "short",
+                            })
+                          : "-"}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex gap-1.5 justify-end">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleBlast(guest)}
+                            disabled={blasting === guest.id || !whatsappConnected}
+                            title={!whatsappConnected ? "Hubungkan WhatsApp terlebih dahulu" : "Kirim ulang manual"}
+                            className="h-8 px-2.5 text-[#6b5c53] hover:text-emerald-700 hover:bg-emerald-50"
+                          >
+                            <Send className="w-3.5 h-3.5 mr-1" />
+                            {blasting === guest.id ? "..." : "Kirim Ulang"}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDelete(guest.id)}
+                            className="h-8 px-2 text-red-400 hover:text-red-600 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+            <Pagination
+              page={sentPage}
+              totalPages={sentTotalPages}
+              onChange={setSentPage}
+            />
+          </div>
         </div>
       </div>
 
