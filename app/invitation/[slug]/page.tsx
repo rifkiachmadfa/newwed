@@ -13,7 +13,7 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_BASE_URL ?? "https://undangandigital-eight.vercel.app";
 
 const OG_IMAGE_URL =
-  "https://res.cloudinary.com/dzjydhoc7/image/upload/v1784378310/couple_rwujja.png";
+  "https://res.cloudinary.com/dzjydhoc7/image/upload/v1789303474/bg_wfd5um.jpg";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
